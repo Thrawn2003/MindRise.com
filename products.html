@@ -14,7 +14,6 @@
   <a class="skip" href="#main">Skip to content</a>
   <div id="progress" aria-hidden="true"></div>
   <canvas id="field" aria-hidden="true"></canvas>
-  <canvas id="trail" aria-hidden="true"></canvas>
 
   <header class="site-header" id="header">
     <a class="wordmark" href="index.html" aria-label="Mindrise, home">Mindrise</a>
@@ -46,7 +45,7 @@
           <p class="fade">Write a question, answer it from memory, then say how it felt. Recall schedules the next visit so the hard ones return soon and the easy ones rest.</p>
           <ul class="fade"><li>Spaced scheduling, no points</li><li>Keyboard first: space to turn, 1 2 3 to grade</li><li>Diagrams and images on either side</li></ul>
         </div>
-        <div class="specimen rbox fade" id="recallBox" tabindex="-1">
+        <div class="specimen sheen rbox fade" id="recallBox" tabindex="-1">
           <span class="label">Specimen · Recall</span>
           <div id="recallStage">
             <div class="rmeta"><span id="rCount">Card 1 of 6</span><span>Space turns · 1 2 3 grades</span></div>
@@ -69,7 +68,7 @@
           <p class="fade">Type an equation and see it at once. Drag the page to explore, zoom to look closer, and hover to read exact values.</p>
           <ul class="fade"><li>Several functions at once, colour-keyed</li><li>Understands <em>2x</em>, <em>sin(x)</em>, <em>x^2</em> and more</li><li>Asymptotes handled gracefully</li></ul>
         </div>
-        <div class="specimen fade">
+        <div class="specimen sheen fade">
           <span class="label">Specimen · Plot</span>
           <div class="fn-inputs">
             <label class="fn" style="--c: var(--accent)"><span>f₁(x) =</span><input id="fn1" value="sin(x)" spellcheck="false" autocomplete="off" aria-label="Function 1" /></label>
@@ -98,7 +97,7 @@
           <p class="fade">A session timer that draws a single line, and a short list for today. No sounds unless you want them, no streaks, no guilt.</p>
           <ul class="fade"><li>Sessions of any length</li><li>A small list, honestly short</li><li>Rests suggested, never enforced</li></ul>
         </div>
-        <div class="specimen fade">
+        <div class="specimen sheen fade">
           <span class="label">Specimen · Cadence</span>
           <div class="rmeta"><span>Focus session</span>
             <span id="cPresets"><button class="chip" data-sec="10">10 sec</button><button class="chip active" data-sec="1500">25 min</button><button class="chip" data-sec="3000" style="margin-right:0">50 min</button></span>
@@ -116,6 +115,8 @@
         </div>
       </section>
     </div>
+
+    <section class="next wrap"><a class="next-link" href="courses.html"><span class="kicker">Continue</span><span class="next-title">Courses</span><span class="arr" aria-hidden="true">→</span></a></section>
   </main>
 
   <footer class="site-footer">
@@ -127,7 +128,7 @@
         <div><h4>Mindrise</h4><ul><li><a href="approach.html">Approach</a></li><li><a href="courses.html">Courses</a></li><li><a href="pricing.html">Pricing</a></li><li><a href="contact.html">Contact</a></li></ul></div>
         <div><h4>Reading</h4><ul><li><button id="setTheme">Reading: paper</button></li><li><button id="setMotion">Motion: on</button></li><li><button id="setSound">Sound: off</button></li></ul></div>
       </div>
-      <div class="legal"><span>© <span id="year"></span> Mindrise</span><span>Set in Newsreader &amp; Inter</span></div>
+      <div class="legal"><span><span id="greet"></span> · © <span id="year"></span> Mindrise</span><span>Set in Newsreader &amp; Inter</span></div>
     </div>
   </footer>
 

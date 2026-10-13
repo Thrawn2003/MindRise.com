@@ -15,13 +15,15 @@ Open `index.html` in a browser, or serve the folder (`python3 -m http.server`).
 ## Files
 - `css/site.css` the whole design system
 - `js/core.js` helpers and saved settings (reading mode, motion, sound)
-- `js/ambient.js` the shared atmosphere: a different living background per page, reading lamp, ink trail, scroll-drawn figures, glossary notes, hover figure, page transitions
+- `js/ambient.js` the shared atmosphere: soft window light with drifting dust that is stirred by moving air (cursor) and settles while a focus session runs, a reading lamp, scroll-drawn figures, words that darken as you read, glossary notes, hover figure, page transitions
+- `js/reading.js` (Approach) select any passage to mark it; marks are kept on the device
+- `js/geometry.js` (Home) Euclid's first proposition, draggable
 - `js/products.js`, `courses.js`, `pricing.js`, `contact.js` page behaviour
 
 Script order matters: `core.js`, then `ambient.js`, then the page script.
 
 ## Notes
-- Each page picks its background with `<body data-scene="...">`: `flow`, `contour`, `dots`, `ruled`, `halftone`.
+- The background is one calm scene on every page. Visitors can switch motion off from the footer.
 - Visitors can switch off motion or switch on sound from the footer; sound is off by default.
 - Pricing, plan limits, FAQ answers, course details and the contact address (`hello@mindrise.com`) are placeholders. Change the address in `contact.html` (`data-to`).
 - Fonts (Newsreader, Inter) load from Google Fonts; the site falls back to system serif/sans without them.

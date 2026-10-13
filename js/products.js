@@ -336,10 +336,25 @@
         g.beginPath();
         g.arc(hoverX, sy(y), 5, 0, Math.PI * 2);
         g.fill();
+        // the tangent at this point, with its slope
+        const hh = 0.5 / s;
+        const slope = (fn(x + hh) - fn(x - hh)) / (2 * hh);
+        if (Number.isFinite(slope) && Math.abs(slope) < 1e4) {
+          const len = 56 / Math.hypot(1, slope);
+          g.strokeStyle = colors[i];
+          g.lineWidth = 1.4;
+          g.globalAlpha = 0.85;
+          g.beginPath();
+          g.moveTo(hoverX - len, sy(y) + slope * len);
+          g.lineTo(hoverX + len, sy(y) - slope * len);
+          g.stroke();
+          g.globalAlpha = 1;
+          lines.push(`f${i + 1}\u2032 = ${fmtNum(slope)}`);
+        }
       });
-      g.globalAlpha = 0.88;
+      g.globalAlpha = 0.9;
       g.fillStyle = css('--bg');
-      g.fillRect(8, 8, 118, 10 + lines.length * 18);
+      g.fillRect(8, 8, 132, 10 + lines.length * 18);
       g.globalAlpha = 1;
       g.fillStyle = css('--ink');
       g.textAlign = 'left';
@@ -433,6 +448,7 @@
   function renderCadence() {
     tTime.textContent = M.fmtTime(cs.remaining);
     tBar.style.transform = `scaleX(${cs.total ? 1 - cs.remaining / cs.total : 0})`;
+    root.dataset.focus = cs.running ? 'on' : 'off'; // the room settles while you focus
     tStart.textContent = cs.running ? 'Pause' : cs.remaining < cs.total && cs.remaining > 0 ? 'Resume' : 'Begin';
     document.title = cs.running ? `${M.fmtTime(cs.remaining)} · ${baseTitle}` : baseTitle;
   }

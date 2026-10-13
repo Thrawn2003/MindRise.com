@@ -1,4 +1,4 @@
-/* Ambient layer: a living background per page, a reading lamp, an ink trail, scroll-driven drawing,
+/* Ambient layer: window light with drifting dust, a reading lamp, scroll-driven drawing, reading light,
    glossary notes, hover figures and other small things that make the pages feel handled. */
 (() => {
   const M = window.Mindrise;
@@ -57,229 +57,92 @@
   addEventListener('pointerup', (e) => e.pointerType === 'touch' && setTimeout(dropPointer, 700));
 
   /* =========================================================
-     The living background
+     The background: window light, with dust that drifts and stirs
      ========================================================= */
   const canvas = $('#field');
   const ctx = canvas.getContext('2d');
-  const scene = document.body.dataset.scene || 'halftone';
-  let w = 0, h = 0, C = {};
-  let pulses = [];
+  let w = 0, h = 0;
+  let motes = [];
+  let calm = 0; // 0 = normal, 1 = settled (while a focus session is running)
+  let clock = 0, lastNow = 0;
+  let cvx = 0, cvy = 0, lastPx = OFF, lastPy = OFF;
+  const beams = [{ x: 0.8, w: 300, a: -0.38, k: 1 }, { x: 0.44, w: 190, a: -0.33, k: 0.6 }];
+  const screenY = (m) => (((m.y - scrollY * 0.14 * m.z) % h) + h) % h;
 
-  const readColors = () => { C = { ink: css('--ink'), accent: css('--accent'), brass: css('--brass') }; };
+  function seedMotes() {
+    const n = w < 700 ? 28 : Math.round(clamp((w * h) / 26000, 36, 72));
+    motes = Array.from({ length: n }, () => ({ x: rand(0, w), y: rand(0, h), z: rand(0.35, 1), r: rand(0.7, 1.9), vx: 0, vy: 0, ph: rand(0, TAU) }));
+  }
 
-  const scenes = {
-    /* iron-filing flow field: strokes drift with noise and curl around the cursor */
-    flow: {
-      fps: 60,
-      init() { this.cell = w < 700 ? 34 : 38; this.cols = Math.ceil(w / this.cell) + 1; this.rows = Math.ceil(h / this.cell) + 1; },
-      draw(t) {
-        ctx.lineCap = 'round';
-        ctx.lineWidth = 1;
-        ctx.strokeStyle = C.ink;
-        const sc = scrollY * 0.0006;
-        pulses = pulses.filter((p) => p.r < 1100);
-        pulses.forEach((p) => { p.r += 7; p.amp *= 0.985; });
-        for (let r = 0; r < this.rows; r++) {
-          for (let c = 0; c < this.cols; c++) {
-            const x = c * this.cell + (r & 1 ? this.cell / 2 : 0);
-            const y = r * this.cell;
-            let a = noise(x * 0.0014, y * 0.0014, t * 0.04 + sc) * TAU * 2;
-            let k = 0;
-            const dx = x - ptr.x, dy = y - ptr.y, d2 = dx * dx + dy * dy;
-            if (d2 < 90000) {
-              k = 1 - Math.sqrt(d2) / 300;
-              k *= k;
-              a = lerpAngle(a, Math.atan2(dy, dx) + Math.PI / 2, k * 0.9);
-            }
-            for (let i = 0; i < pulses.length; i++) {
-              const p = pulses[i];
-              const dd = Math.hypot(x - p.x, y - p.y) - p.r;
-              if (dd > -80 && dd < 80) a += Math.sin((dd / 80) * Math.PI) * p.amp;
-            }
-            const len = 7 + k * 8;
-            const cs = Math.cos(a) * len, sn = Math.sin(a) * len;
-            ctx.globalAlpha = 0.13 + k * 0.5;
-            ctx.beginPath();
-            ctx.moveTo(x - cs, y - sn);
-            ctx.lineTo(x + cs, y + sn);
-            ctx.stroke();
-          }
+  function paint() {
+    ctx.clearRect(0, 0, w, h);
+    const night = root.dataset.theme === 'night';
+    const lean = ptr.x === OFF ? 0 : (ptr.x / w - 0.5) * 0.05;
+    beams.forEach((b, i) => {
+      const breathe = 0.75 + 0.25 * Math.sin(clock * 0.22 + i * 2);
+      const alpha = (night ? 0.055 : 0.5) * b.k * breathe * (1 - calm * 0.5);
+      const col = night ? '214,168,92' : '255,243,214';
+      ctx.save();
+      ctx.translate(w * b.x, -h * 0.2);
+      ctx.rotate(b.a + lean);
+      const g = ctx.createLinearGradient(-b.w / 2, 0, b.w / 2, 0);
+      g.addColorStop(0, `rgba(${col},0)`);
+      g.addColorStop(0.5, `rgba(${col},${alpha.toFixed(3)})`);
+      g.addColorStop(1, `rgba(${col},0)`);
+      ctx.fillStyle = g;
+      ctx.fillRect(-b.w / 2, 0, b.w, h * 1.9);
+      ctx.restore();
+    });
+    const col = night ? '236,214,168' : '110,84,48';
+    motes.forEach((m) => {
+      const py = screenY(m);
+      let inBeam = 0;
+      beams.forEach((b) => {
+        const ang = b.a + lean;
+        const dx = m.x - w * b.x, dy = py + h * 0.2;
+        const dist = dx * Math.cos(ang) + dy * Math.sin(ang);
+        inBeam += Math.exp(-(dist * dist) / (2 * (b.w * 0.32) ** 2)) * b.k;
+      });
+      const tw = 0.7 + 0.3 * Math.sin(clock * 0.8 + m.ph);
+      const a = (0.1 + m.z * 0.16 + inBeam * (night ? 0.4 : 0.22)) * tw * (1 - calm * 0.35);
+      ctx.fillStyle = `rgba(${col},${Math.min(a, 0.7).toFixed(3)})`;
+      ctx.beginPath();
+      ctx.arc(m.x, py, m.r * (0.8 + m.z * 0.5), 0, TAU);
+      ctx.fill();
+    });
+  }
+
+  function step(dt) {
+    const speed = 1 - calm * 0.65;
+    if (ptr.x !== OFF && lastPx !== OFF) {
+      cvx = lerp(cvx, ptr.x - lastPx, 0.3);
+      cvy = lerp(cvy, ptr.y - lastPy, 0.3);
+    } else {
+      cvx *= 0.8;
+      cvy *= 0.8;
+    }
+    lastPx = ptr.x;
+    lastPy = ptr.y;
+    const moving = Math.hypot(cvx, cvy) > 1.5;
+    motes.forEach((m) => {
+      const a = noise(m.x * 0.0011, m.y * 0.0011, clock * 0.05) * TAU * 2;
+      const dx0 = Math.cos(a) * 7 * m.z * speed, dy0 = Math.sin(a) * 7 * m.z * speed - 2.5 * m.z * speed;
+      if (moving) {
+        const d = Math.hypot(m.x - ptr.x, screenY(m) - ptr.y);
+        if (d < 200) {
+          const f = (1 - d / 200) ** 2 * 0.05 * (0.4 + m.z); // dust is carried by moving air, not pushed by a still cursor
+          m.vx += cvx * f;
+          m.vy += cvy * f;
         }
-        ctx.globalAlpha = 1;
-      },
-    },
-
-    /* topographic contours that bend around an invisible hill under the cursor */
-    contour: {
-      fps: 40,
-      init() {
-        this.cell = w < 700 ? 34 : 26;
-        this.cols = Math.ceil(w / this.cell) + 1;
-        this.rows = Math.ceil(h / this.cell) + 1;
-        this.f = new Float32Array(this.cols * this.rows);
-      },
-      draw(t) {
-        const { cols, rows, cell, f } = this;
-        const sc = scrollY * 0.00035;
-        for (let r = 0; r < rows; r++) {
-          for (let c = 0; c < cols; c++) {
-            const x = c * cell, y = r * cell;
-            let v = noise(x * 0.0021, y * 0.0021, t * 0.035 + sc) * 0.75 + noise(x * 0.006, y * 0.006, t * 0.02) * 0.25;
-            const dx = x - ptr.x, dy = y - ptr.y;
-            v += 0.5 * Math.exp(-(dx * dx + dy * dy) / (2 * 170 * 170));
-            f[r * cols + c] = v;
-          }
-        }
-        ctx.lineCap = 'round';
-        ctx.strokeStyle = C.ink;
-        for (let li = 0; li < 9; li++) {
-          const L = 0.28 + li * 0.07;
-          const major = li % 3 === 0;
-          ctx.globalAlpha = major ? 0.34 : 0.17;
-          ctx.lineWidth = major ? 1.2 : 0.8;
-          ctx.beginPath();
-          for (let r = 0; r < rows - 1; r++) {
-            for (let c = 0; c < cols - 1; c++) {
-              const a = f[r * cols + c], b = f[r * cols + c + 1], cc = f[(r + 1) * cols + c + 1], d = f[(r + 1) * cols + c];
-              const idx = (a > L ? 8 : 0) | (b > L ? 4 : 0) | (cc > L ? 2 : 0) | (d > L ? 1 : 0);
-              if (idx === 0 || idx === 15) continue;
-              const x0 = c * cell, y0 = r * cell;
-              const T = [x0 + cell * ((L - a) / (b - a)), y0];
-              const R = [x0 + cell, y0 + cell * ((L - b) / (cc - b))];
-              const B = [x0 + cell * ((L - d) / (cc - d)), y0 + cell];
-              const Lf = [x0, y0 + cell * ((L - a) / (d - a))];
-              const seg = (p, q) => { ctx.moveTo(p[0], p[1]); ctx.lineTo(q[0], q[1]); };
-              switch (idx) {
-                case 1: case 14: seg(Lf, B); break;
-                case 2: case 13: seg(B, R); break;
-                case 3: case 12: seg(Lf, R); break;
-                case 4: case 11: seg(T, R); break;
-                case 5: seg(T, R); seg(Lf, B); break;
-                case 6: case 9: seg(T, B); break;
-                case 7: case 8: seg(Lf, T); break;
-                case 10: seg(Lf, T); seg(B, R); break;
-                default: break;
-              }
-            }
-          }
-          ctx.stroke();
-        }
-        ctx.globalAlpha = 1;
-      },
-    },
-
-    /* graph-paper dots that part gently for the cursor and spring back */
-    dots: {
-      fps: 60,
-      init() {
-        this.gap = w < 700 ? 26 : 30;
-        this.cols = Math.ceil(w / this.gap) + 1;
-        this.rows = Math.ceil(h / this.gap) + 1;
-        const n = this.cols * this.rows;
-        this.ox = new Float32Array(n); this.oy = new Float32Array(n);
-        this.vx = new Float32Array(n); this.vy = new Float32Array(n);
-      },
-      draw() {
-        const { gap, cols, rows, ox, oy, vx, vy } = this;
-        ctx.fillStyle = C.ink;
-        ctx.strokeStyle = C.ink;
-        ctx.lineWidth = 0.8;
-        for (let r = 0; r < rows; r++) {
-          for (let c = 0; c < cols; c++) {
-            const i = r * cols + c;
-            const hx = c * gap, hy = r * gap;
-            const px = hx + ox[i], py = hy + oy[i];
-            const dx = px - ptr.x, dy = py - ptr.y;
-            const d = Math.hypot(dx, dy);
-            let near = 0;
-            if (d < 170) {
-              near = 1 - d / 170;
-              const f = near * near * 2.2;
-              vx[i] += (dx / (d || 1)) * f;
-              vy[i] += (dy / (d || 1)) * f;
-            }
-            vx[i] = (vx[i] - ox[i] * 0.07) * 0.84;
-            vy[i] = (vy[i] - oy[i] * 0.07) * 0.84;
-            ox[i] += vx[i];
-            oy[i] += vy[i];
-            ctx.globalAlpha = 0.2 + near * 0.5;
-            if (c % 4 === 0 && r % 4 === 0) {
-              ctx.beginPath();
-              ctx.moveTo(px - 4, py); ctx.lineTo(px + 4, py);
-              ctx.moveTo(px, py - 4); ctx.lineTo(px, py + 4);
-              ctx.stroke();
-            } else {
-              ctx.beginPath();
-              ctx.arc(px, py, 1.1 + near * 1.8, 0, TAU);
-              ctx.fill();
-            }
-          }
-        }
-        ctx.globalAlpha = 1;
-      },
-    },
-
-    /* a ruled sheet that dips where it is touched and drifts slower than the page */
-    ruled: {
-      fps: 60,
-      init() { this.gap = 36; },
-      draw(t) {
-        const gap = this.gap;
-        const shift = (scrollY * 0.25) % gap;
-        ctx.lineWidth = 1;
-        ctx.strokeStyle = C.ink;
-        ctx.globalAlpha = 0.15;
-        for (let y = -shift; y < h + gap; y += gap) {
-          ctx.beginPath();
-          for (let x = 0; x <= w + 12; x += 12) {
-            const dx = x - ptr.x, dy = y - ptr.y;
-            const dip = 16 * Math.exp(-(dx * dx + dy * dy) / (2 * 120 * 120));
-            const wave = Math.sin(x * 0.004 + t * 0.5 + y * 0.01) * 1.3;
-            if (x === 0) ctx.moveTo(x, y + dip + wave);
-            else ctx.lineTo(x, y + dip + wave);
-          }
-          ctx.stroke();
-        }
-        ctx.globalAlpha = 0.3;
-        ctx.strokeStyle = C.accent;
-        ctx.beginPath();
-        ctx.moveTo(w * 0.085, 0);
-        ctx.lineTo(w * 0.085, h);
-        ctx.stroke();
-        ctx.globalAlpha = 1;
-      },
-    },
-
-    /* a printer's halftone: dot size follows a slow field and the cursor */
-    halftone: {
-      fps: 45,
-      init() { this.gap = w < 700 ? 18 : 22; },
-      draw(t) {
-        const gap = this.gap;
-        const sc = scrollY * 0.0004;
-        ctx.fillStyle = C.ink;
-        for (let r = 0, y = 0; y < h + gap; r++, y += gap) {
-          for (let x = (r & 1) * (gap / 2); x < w + gap; x += gap) {
-            let v = noise(x * 0.003, y * 0.003, t * 0.04 + sc);
-            const dx = x - ptr.x, dy = y - ptr.y;
-            v += 0.7 * Math.exp(-(dx * dx + dy * dy) / (2 * 150 * 150));
-            const rad = gap * 0.5 * Math.pow(clamp((v - 0.3) * 1.5, 0, 1), 1.2);
-            if (rad < 0.5) continue;
-            ctx.globalAlpha = 0.16;
-            ctx.beginPath();
-            ctx.arc(x, y, rad, 0, TAU);
-            ctx.fill();
-          }
-        }
-        ctx.globalAlpha = 1;
-      },
-    },
-  };
-
-  const S = scenes[scene] || scenes.halftone;
-  let clock = 0;
-  let lastNow = 0;
-  let lastDraw = 0;
+      }
+      m.vx *= 0.965;
+      m.vy *= 0.965;
+      m.x += dx0 * dt + m.vx;
+      m.y += dy0 * dt + m.vy;
+      if (m.x < -10) m.x = w + 10; else if (m.x > w + 10) m.x = -10;
+      if (m.y < -10) m.y += h; else if (m.y > h + 10) m.y -= h;
+    });
+  }
 
   function resize() {
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -288,78 +151,57 @@
     canvas.width = w * dpr;
     canvas.height = h * dpr;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    S.init();
+    seedMotes();
     paint();
   }
-  function paint() {
-    ctx.clearRect(0, 0, w, h);
-    S.draw(clock);
-  }
-  readColors();
   addEventListener('resize', resize);
-  M.bus.addEventListener('settings', () => { readColors(); paint(); });
-  resize();
+  M.bus.addEventListener('settings', () => { setLamp(); paint(); });
 
-  // clicking blank paper sends a ripple through the flow field
+  // a click on blank paper lets out a breath of air
   addEventListener('pointerdown', (e) => {
-    if (scene !== 'flow' || !motionOn()) return;
-    if (e.target.closest('a, button, input, textarea, select, label, summary, canvas, .card')) return;
-    pulses.push({ x: e.clientX, y: e.clientY, r: 0, amp: 1.4 });
-    if (pulses.length > 4) pulses.shift();
+    if (!motionOn() || e.target.closest('a, button, input, textarea, select, label, summary, canvas, .card, .specimen, mark, .term')) return;
+    motes.forEach((m) => {
+      const dx = m.x - e.clientX, dy = screenY(m) - e.clientY, d = Math.hypot(dx, dy);
+      if (d < 260) {
+        const f = (1 - d / 260) ** 2 * 7;
+        m.vx += (dx / (d || 1)) * f;
+        m.vy += (dy / (d || 1)) * f;
+      }
+    });
   });
 
+  // the lamp is warmer in the evening
+  function setLamp() {
+    const night = M.settings.theme === 'night';
+    const hr = new Date().getHours();
+    let c;
+    if (night) c = 'rgba(255,205,130,0.07)';
+    else if (hr >= 17 && hr < 21) c = 'rgba(255,208,140,0.30)';
+    else if (hr >= 21 || hr < 6) c = 'rgba(255,196,120,0.24)';
+    else c = 'rgba(255,238,196,0.26)';
+    root.style.setProperty('--lamp', c);
+  }
+  setLamp();
+  const hrNow = new Date().getHours();
+  const greet = $('#greet');
+  if (greet) greet.textContent = hrNow >= 5 && hrNow < 12 ? 'Good morning' : hrNow < 17 && hrNow >= 12 ? 'Good afternoon' : hrNow >= 17 && hrNow < 22 ? 'Good evening' : 'A quiet hour';
+
+  resize();
   (function loop(now) {
     requestAnimationFrame(loop);
     if (document.hidden || !motionOn()) return;
-    if (now - lastDraw < 1000 / S.fps - 2) return;
-    lastDraw = now;
-    clock += Math.min((now - lastNow) / 1000 || 0, 0.1);
+    const dt = Math.min((now - lastNow) / 1000 || 0, 0.05);
     lastNow = now;
+    clock += dt;
+    calm = lerp(calm, root.dataset.focus === 'on' ? 1 : 0, 0.02);
     if (ptr.tx === OFF) { ptr.x = OFF; ptr.y = OFF; }
     else {
       ptr.x = ptr.x === OFF ? ptr.tx : lerp(ptr.x, ptr.tx, 0.18);
       ptr.y = ptr.y === OFF ? ptr.ty : lerp(ptr.y, ptr.ty, 0.18);
     }
+    step(dt);
     paint();
   })(0);
-
-  /* =========================================================
-     Ink trail: a hairline that follows the cursor and fades
-     ========================================================= */
-  const trail = $('#trail');
-  if (trail && fine) {
-    const tc = trail.getContext('2d');
-    let pts = [];
-    let running = false;
-    const sizeTrail = () => { trail.width = innerWidth; trail.height = innerHeight; };
-    sizeTrail();
-    addEventListener('resize', sizeTrail);
-    const step = () => {
-      const now = performance.now();
-      pts = pts.filter((p) => now - p.t < 650);
-      tc.clearRect(0, 0, trail.width, trail.height);
-      if (pts.length > 1) {
-        tc.lineCap = 'round';
-        for (let i = 1; i < pts.length; i++) {
-          const age = (now - pts[i].t) / 650;
-          tc.strokeStyle = rgba(C.ink, (1 - age) * 0.38);
-          tc.lineWidth = 0.6 + (1 - age) * 1.1;
-          tc.beginPath();
-          tc.moveTo(pts[i - 1].x, pts[i - 1].y);
-          tc.lineTo(pts[i].x, pts[i].y);
-          tc.stroke();
-        }
-        requestAnimationFrame(step);
-      } else {
-        running = false;
-      }
-    };
-    addEventListener('pointermove', (e) => {
-      if (!motionOn() || e.pointerType === 'touch') return;
-      pts.push({ x: e.clientX, y: e.clientY, t: performance.now() });
-      if (!running) { running = true; requestAnimationFrame(step); }
-    }, { passive: true });
-  }
 
   /* =========================================================
      Header: quiet on the way down, back on the way up
@@ -377,7 +219,10 @@
     else if (y < lastY - 6) header.classList.remove('hide');
     lastY = y;
     const max = root.scrollHeight - innerHeight;
-    bar.style.transform = `scaleX(${max > 0 ? clamp(y / max, 0, 1) : 0})`;
+    const frac = max > 0 ? clamp(y / max, 0, 1) : 0;
+    bar.style.transform = `scaleX(${frac})`;
+    root.style.setProperty('--p', frac.toFixed(4));
+    updateReads();
     if (motionOn()) {
       parallax.forEach((el) => {
         const r = el.getBoundingClientRect();
@@ -458,8 +303,55 @@
     en.target.classList.add('in');
     io.unobserve(en.target);
   }), { threshold: 0.15, rootMargin: '0px 0px -6% 0px' });
-  $$('[data-rise], .fade').forEach((el) => io.observe(el));
-  M.bus.addEventListener('settings', () => !motionOn() && $$('[data-rise], .fade').forEach((el) => el.classList.add('in')));
+  $$('[data-rise], .fade, .section-head').forEach((el) => io.observe(el));
+  M.bus.addEventListener('settings', () => !motionOn() && $$('[data-rise], .fade, .section-head').forEach((el) => el.classList.add('in')));
+
+  /* =========================================================
+     Reading light: words darken as you reach them
+     ========================================================= */
+  const reads = $$('[data-read]').map((el) => {
+    const words = [];
+    const holder = document.createElement('span');
+    const walk = (node, parent) => node.childNodes.forEach((ch) => {
+      if (ch.nodeType === 3) {
+        ch.textContent.split(/(\s+)/).forEach((tok) => {
+          if (!tok) return;
+          if (/^\s+$/.test(tok)) { parent.appendChild(document.createTextNode(' ')); return; }
+          const sp = document.createElement('span');
+          sp.className = 'rd';
+          sp.textContent = tok;
+          parent.appendChild(sp);
+          words.push(sp);
+        });
+      } else if (ch.nodeType === 1) {
+        const copy = ch.cloneNode(false);
+        parent.appendChild(copy);
+        walk(ch, copy);
+      }
+    });
+    el.setAttribute('aria-label', el.textContent.trim().replace(/\s+/g, ' '));
+    walk(el, holder);
+    holder.setAttribute('aria-hidden', 'true');
+    el.textContent = '';
+    el.appendChild(holder);
+    return { el, words };
+  });
+  function updateReads() {
+    reads.forEach(({ el, words }) => {
+      const r = el.getBoundingClientRect();
+      const p = motionOn() ? clamp((innerHeight * 0.86 - r.top) / (innerHeight * 0.5), 0, 1) : 1;
+      const n = Math.round(p * words.length);
+      words.forEach((sp, i) => sp.classList.toggle('lit', i < n));
+    });
+  }
+
+  /* a soft sheen that follows the cursor over framed things */
+  $$('.sheen').forEach((el) => el.addEventListener('pointermove', (e) => {
+    if (!motionOn() || e.pointerType === 'touch') return;
+    const r = el.getBoundingClientRect();
+    el.style.setProperty('--px', `${((e.clientX - r.left) / r.width) * 100}%`);
+    el.style.setProperty('--py', `${((e.clientY - r.top) / r.height) * 100}%`);
+  }));
 
   /* =========================================================
      Plates: line figures that draw themselves as you scroll
@@ -564,7 +456,7 @@
     });
     card.addEventListener('pointerleave', () => { card.style.transform = ''; });
   });
-  $$('.btn, .link-arrow, .filter').forEach((el) => {
+  $$('.btn, .link-arrow, .filter, .next-link').forEach((el) => {
     el.addEventListener('pointerenter', (e) => {
       const r = el.getBoundingClientRect();
       el.style.setProperty('--bx', `${e.clientX - r.left}px`);

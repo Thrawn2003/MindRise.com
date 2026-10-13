@@ -14,7 +14,6 @@
   <a class="skip" href="#main">Skip to content</a>
   <div id="progress" aria-hidden="true"></div>
   <canvas id="field" aria-hidden="true"></canvas>
-  <canvas id="trail" aria-hidden="true"></canvas>
 
   <header class="site-header" id="header">
     <a class="wordmark" href="index.html" aria-label="Mindrise, home">Mindrise</a>
@@ -45,11 +44,11 @@
         <span class="bill-label" data-mode="yearly">Yearly · save about 20%</span>
       </div>
       <div class="plans fade">
-        <article class="plan"><h3>Student</h3><p class="amount"><span data-monthly="$0" data-yearly="$0">$0</span></p><p class="billed">free, always</p>
+        <article class="plan sheen"><h3>Student</h3><p class="amount"><span data-monthly="$0" data-yearly="$0">$0</span></p><p class="billed">free, always</p>
           <ul><li>Three courses</li><li>Recall, up to 200 cards</li><li>Plot and Cadence</li></ul><a class="btn" href="contact.html">Begin</a></article>
-        <article class="plan featured"><h3>Scholar</h3><p class="amount"><span data-monthly="$9" data-yearly="$7">$9</span></p><p class="billed billed-live">billed monthly</p>
+        <article class="plan featured sheen"><h3>Scholar</h3><p class="amount"><span data-monthly="$9" data-yearly="$7">$9</span></p><p class="billed billed-live">billed monthly</p>
           <ul><li>Every course</li><li>Unlimited cards and graphs</li><li>Notes you can export</li></ul><a class="btn solid" href="contact.html">Choose Scholar</a></article>
-        <article class="plan"><h3>Institution</h3><p class="amount"><span data-monthly="$29" data-yearly="$24">$29</span></p><p class="billed billed-live">billed monthly</p>
+        <article class="plan sheen"><h3>Institution</h3><p class="amount"><span data-monthly="$29" data-yearly="$24">$29</span></p><p class="billed billed-live">billed monthly</p>
           <ul><li>Up to forty learners</li><li>Assign courses</li><li>A class overview, never a ranking</li></ul><a class="btn" href="contact.html">Talk to us</a></article>
       </div>
     </section>
@@ -63,6 +62,8 @@
         <div class="faq-item"><button class="faq-q" aria-expanded="false">What happens to my notes?<span class="plus" aria-hidden="true"></span></button><div class="faq-a"><div><p>They are yours. You can export them at any time, and we do not sell them.</p></div></div></div>
       </div>
     </section>
+
+    <section class="next wrap"><a class="next-link" href="contact.html"><span class="kicker">Continue</span><span class="next-title">Contact</span><span class="arr" aria-hidden="true">→</span></a></section>
   </main>
 
   <footer class="site-footer">
@@ -74,7 +75,7 @@
         <div><h4>Mindrise</h4><ul><li><a href="approach.html">Approach</a></li><li><a href="courses.html">Courses</a></li><li><a href="pricing.html">Pricing</a></li><li><a href="contact.html">Contact</a></li></ul></div>
         <div><h4>Reading</h4><ul><li><button id="setTheme">Reading: paper</button></li><li><button id="setMotion">Motion: on</button></li><li><button id="setSound">Sound: off</button></li></ul></div>
       </div>
-      <div class="legal"><span>© <span id="year"></span> Mindrise</span><span>Set in Newsreader &amp; Inter</span></div>
+      <div class="legal"><span><span id="greet"></span> · © <span id="year"></span> Mindrise</span><span>Set in Newsreader &amp; Inter</span></div>
     </div>
   </footer>
 

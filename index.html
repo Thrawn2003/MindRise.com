@@ -14,7 +14,6 @@
   <a class="skip" href="#main">Skip to content</a>
   <div id="progress" aria-hidden="true"></div>
   <canvas id="field" aria-hidden="true"></canvas>
-  <canvas id="trail" aria-hidden="true"></canvas>
 
   <header class="site-header" id="header">
     <a class="wordmark" href="index.html" aria-label="Mindrise, home">Mindrise</a>
@@ -54,15 +53,18 @@
 
     <section class="block wrap">
       <div class="split">
-        <figure class="plate" aria-label="Figure: two circles and an equilateral triangle">
-          <svg viewBox="0 0 420 260" role="img" aria-label="Two overlapping circles with an equilateral triangle drawn between their centres and an intersection">
-            <circle data-draw cx="150" cy="130" r="120" />
-            <circle data-draw cx="270" cy="130" r="120" />
-            <path class="light" data-draw d="M150 130 H270" />
-            <path class="accent" data-draw d="M150 130 L270 130 L210 233.9 Z" />
-            <text x="132" y="126">A</text><text x="278" y="126">B</text><text x="203" y="252">C</text>
+        <figure class="geom fade">
+          <svg id="geom" viewBox="0 0 420 300" role="group" aria-label="Interactive construction: two circles and an equilateral triangle. Drag points A and B.">
+            <circle id="gcA" class="gc" cx="160" cy="130" r="100" />
+            <circle id="gcB" class="gc" cx="260" cy="130" r="100" />
+            <line id="gab" x1="160" y1="130" x2="260" y2="130" />
+            <path id="gtri" d="M160 130 L260 130 L210 216.6 Z" />
+            <text id="lA" x="142" y="118">A</text><text id="lB" x="272" y="118">B</text><text id="lC" x="206" y="238">C</text>
+            <g class="handle" id="hA" tabindex="0" role="slider" aria-label="Point A. Drag, or use the arrow keys." transform="translate(160 130)"><circle class="hit" r="20"/><circle class="ring" r="9"/><circle class="dot" r="5"/></g>
+            <g class="handle" id="hB" tabindex="0" role="slider" aria-label="Point B. Drag, or use the arrow keys." transform="translate(260 130)"><circle class="hit" r="20"/><circle class="ring" r="9"/><circle class="dot" r="5"/></g>
           </svg>
-          <figcaption>Fig. 1 — Euclid, Book I, Proposition 1: a triangle made from nothing but two circles.</figcaption>
+          <p class="readout" id="geomReadout">AB = 100   ·   AC = 100   ·   BC = 100   ·   every angle 60°</p>
+          <figcaption>Fig. 1 — Euclid, Book I, Proposition 1. Drag A or B: however you place them, the triangle stays equilateral.</figcaption>
         </figure>
         <div>
           <p class="kicker fade">A belief</p>
@@ -86,7 +88,7 @@
     <section class="quote-wrap">
       <div class="wrap">
         <span class="kicker">Our principle</span>
-        <p class="quote" data-rise>Good tools disappear, and what you learn <em>stays</em>.</p>
+        <p class="quote" data-read>Good tools disappear, and what you learn <em>stays</em>.</p>
       </div>
     </section>
 
@@ -101,6 +103,8 @@
       <svg data-fig="plot" viewBox="0 0 110 100"><path d="M10 92 V10 M10 52 H102"/><path d="M10 52 C28 6 46 6 55 52 S84 98 102 52"/></svg>
       <svg data-fig="cadence" viewBox="0 0 110 100"><circle cx="55" cy="50" r="38"/><path d="M55 50 V22 M55 50 L74 60"/><path d="M55 12 V18 M55 82 V88 M17 50 H23 M87 50 H93"/></svg>
     </div>
+
+    <section class="next wrap"><a class="next-link" href="approach.html"><span class="kicker">Continue</span><span class="next-title">Approach</span><span class="arr" aria-hidden="true">→</span></a></section>
   </main>
 
   <footer class="site-footer">
@@ -112,11 +116,12 @@
         <div><h4>Mindrise</h4><ul><li><a href="approach.html">Approach</a></li><li><a href="courses.html">Courses</a></li><li><a href="pricing.html">Pricing</a></li><li><a href="contact.html">Contact</a></li></ul></div>
         <div><h4>Reading</h4><ul><li><button id="setTheme">Reading: paper</button></li><li><button id="setMotion">Motion: on</button></li><li><button id="setSound">Sound: off</button></li></ul></div>
       </div>
-      <div class="legal"><span>© <span id="year"></span> Mindrise</span><span>Set in Newsreader &amp; Inter</span></div>
+      <div class="legal"><span><span id="greet"></span> · © <span id="year"></span> Mindrise</span><span>Set in Newsreader &amp; Inter</span></div>
     </div>
   </footer>
 
   <script src="js/core.js"></script>
   <script src="js/ambient.js"></script>
+  <script src="js/geometry.js"></script>
 </body>
 </html>

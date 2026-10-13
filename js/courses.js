@@ -10,6 +10,7 @@
   rows.forEach((row) => {
     const head = $('.entry-head', row);
     const body = $('.syllabus', row);
+    $$('.syl-grid li', row).forEach((li, i) => li.style.setProperty('--i', i));
     // prepare the emblem so it can draw itself
     $$('.emblem [data-draw]', row).forEach((p) => {
       const len = p.getTotalLength ? p.getTotalLength() : 200;
