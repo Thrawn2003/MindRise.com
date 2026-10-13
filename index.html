@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="paper">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mindrise — Tools for the serious student</title>
+  <meta name="description" content="Mindrise designs quiet, considered software for students: spaced flashcards, a graphing workspace, and a calm focus planner." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/site.css" />
+</head>
+<body data-scene="flow">
+  <a class="skip" href="#main">Skip to content</a>
+  <div id="progress" aria-hidden="true"></div>
+  <canvas id="field" aria-hidden="true"></canvas>
+  <canvas id="trail" aria-hidden="true"></canvas>
+
+  <header class="site-header" id="header">
+    <a class="wordmark" href="index.html" aria-label="Mindrise, home">Mindrise</a>
+    <nav class="site-nav" id="siteNav" aria-label="Primary">
+      <a href="approach.html">Approach</a>
+      <a href="products.html">Products</a>
+      <a href="courses.html">Courses</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="contact.html">Contact</a>
+      <span class="nav-ink" aria-hidden="true"></span>
+    </nav>
+    <button class="icon-btn" id="themeBtn" aria-label="Switch between paper and night reading">◐</button>
+    <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="siteNav">Menu</button>
+  </header>
+
+  <main id="main">
+
+    <section class="hero wrap">
+      <p class="kicker fade">Educational software</p>
+      <h1 id="headline" data-text="Tools for the serious student.">Tools for the serious student.</h1>
+      <p class="standfirst fade">Mindrise designs quiet, considered software for people who are learning something difficult, and would like to remember it.</p>
+      <p class="hero-links fade">
+        <a class="link-arrow" href="products.html">See the products <span aria-hidden="true">→</span></a>
+        <a class="link-arrow" href="approach.html">Read our approach <span aria-hidden="true">→</span></a>
+      </p>
+      <p class="scroll-cue">Scroll</p>
+    </section>
+
+    <section class="block wrap">
+      <header class="section-head"><span class="num">01</span><h2 data-rise>Three instruments</h2></header>
+      <ul class="index-list">
+        <li class="index-row" data-float="recall"><a href="products.html#recall"><span class="n">i.</span><span class="t">Recall</span><span class="d">Flashcards that return just as you are about to forget them.</span><span class="arrow" aria-hidden="true">→</span></a></li>
+        <li class="index-row" data-float="plot"><a href="products.html#plot"><span class="n">ii.</span><span class="t">Plot</span><span class="d">A graphing workspace for equations you want to understand, not just draw.</span><span class="arrow" aria-hidden="true">→</span></a></li>
+        <li class="index-row" data-float="cadence"><a href="products.html#cadence"><span class="n">iii.</span><span class="t">Cadence</span><span class="d">Planning and focus, without notifications, scores or noise.</span><span class="arrow" aria-hidden="true">→</span></a></li>
+      </ul>
+    </section>
+
+    <section class="block wrap">
+      <div class="split">
+        <figure class="plate" aria-label="Figure: two circles and an equilateral triangle">
+          <svg viewBox="0 0 420 260" role="img" aria-label="Two overlapping circles with an equilateral triangle drawn between their centres and an intersection">
+            <circle data-draw cx="150" cy="130" r="120" />
+            <circle data-draw cx="270" cy="130" r="120" />
+            <path class="light" data-draw d="M150 130 H270" />
+            <path class="accent" data-draw d="M150 130 L270 130 L210 233.9 Z" />
+            <text x="132" y="126">A</text><text x="278" y="126">B</text><text x="203" y="252">C</text>
+          </svg>
+          <figcaption>Fig. 1 — Euclid, Book I, Proposition 1: a triangle made from nothing but two circles.</figcaption>
+        </figure>
+        <div>
+          <p class="kicker fade">A belief</p>
+          <h2 data-rise>Attention is the <em>scarce</em> thing</h2>
+          <p class="fade">Most software competes for your attention. We think a study tool should do the opposite: ask for as little as possible, and give the rest back to the work.</p>
+          <p class="fade">Every decision here begins with <span class="term" data-def="The amount of mental effort being used in working memory at one moment. Good design keeps it for the material, not the interface.">cognitive load</span>. If an interface element isn’t helping you think, it isn’t there.</p>
+          <p class="fade"><a class="link-arrow" href="approach.html">The thinking behind it <span aria-hidden="true">→</span></a></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="block wrap">
+      <header class="section-head"><span class="num">02</span><h2 data-rise>How we build</h2></header>
+      <div class="principles">
+        <article class="card fade"><span class="kicker">Quiet by default</span><h3>No streaks, no points.</h3><p>Nothing here measures your worth in badges. The only number we care about is how much you remember next month.</p></article>
+        <article class="card fade"><span class="kicker">Made to be remembered</span><h3>Built on how memory works.</h3><p>Retrieval, spacing and variety are not features. They are the foundation every tool is built on.</p></article>
+        <article class="card fade"><span class="kicker">Respect</span><h3>Your time, your notes.</h3><p>Tools that open fast, work offline-minded, and let you take your work with you when you go.</p></article>
+      </div>
+    </section>
+
+    <section class="quote-wrap">
+      <div class="wrap">
+        <span class="kicker">Our principle</span>
+        <p class="quote" data-rise>Good tools disappear, and what you learn <em>stays</em>.</p>
+      </div>
+    </section>
+
+    <section class="block wrap" style="text-align:center">
+      <p class="kicker fade">Begin</p>
+      <h2 class="fade" style="font-size:clamp(2.2rem,5vw,4rem);margin:14px auto 34px;max-width:18ch">Start with a single course.</h2>
+      <p class="fade"><a class="btn solid" data-magnetic href="courses.html">Browse the courses</a></p>
+    </section>
+
+    <div id="floatFig" aria-hidden="true">
+      <svg data-fig="recall" viewBox="0 0 110 100"><rect x="14" y="40" width="64" height="44"/><rect x="22" y="31" width="64" height="44"/><rect x="30" y="22" width="64" height="44"/><path d="M42 38 H82 M42 48 H70"/></svg>
+      <svg data-fig="plot" viewBox="0 0 110 100"><path d="M10 92 V10 M10 52 H102"/><path d="M10 52 C28 6 46 6 55 52 S84 98 102 52"/></svg>
+      <svg data-fig="cadence" viewBox="0 0 110 100"><circle cx="55" cy="50" r="38"/><path d="M55 50 V22 M55 50 L74 60"/><path d="M55 12 V18 M55 82 V88 M17 50 H23 M87 50 H93"/></svg>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div id="bigmark" data-text="Mindrise" aria-label="Mindrise">Mindrise</div>
+      <div class="foot-grid">
+        <p>Considered software for students who take their learning seriously.</p>
+        <div><h4>Products</h4><ul><li><a href="products.html#recall">Recall</a></li><li><a href="products.html#plot">Plot</a></li><li><a href="products.html#cadence">Cadence</a></li></ul></div>
+        <div><h4>Mindrise</h4><ul><li><a href="approach.html">Approach</a></li><li><a href="courses.html">Courses</a></li><li><a href="pricing.html">Pricing</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+        <div><h4>Reading</h4><ul><li><button id="setTheme">Reading: paper</button></li><li><button id="setMotion">Motion: on</button></li><li><button id="setSound">Sound: off</button></li></ul></div>
+      </div>
+      <div class="legal"><span>© <span id="year"></span> Mindrise</span><span>Set in Newsreader &amp; Inter</span></div>
+    </div>
+  </footer>
+
+  <script src="js/core.js"></script>
+  <script src="js/ambient.js"></script>
+</body>
+</html>

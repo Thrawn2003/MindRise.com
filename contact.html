@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="paper">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact — Mindrise</title>
+  <meta name="description" content="Write to Mindrise: questions, schools and institutions, feedback." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/site.css" />
+</head>
+<body data-scene="halftone">
+  <a class="skip" href="#main">Skip to content</a>
+  <div id="progress" aria-hidden="true"></div>
+  <canvas id="field" aria-hidden="true"></canvas>
+  <canvas id="trail" aria-hidden="true"></canvas>
+
+  <header class="site-header" id="header">
+    <a class="wordmark" href="index.html" aria-label="Mindrise, home">Mindrise</a>
+    <nav class="site-nav" id="siteNav" aria-label="Primary">
+      <a href="approach.html">Approach</a>
+      <a href="products.html">Products</a>
+      <a href="courses.html">Courses</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="contact.html">Contact</a>
+      <span class="nav-ink" aria-hidden="true"></span>
+    </nav>
+    <button class="icon-btn" id="themeBtn" aria-label="Switch between paper and night reading">◐</button>
+    <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="siteNav">Menu</button>
+  </header>
+
+  <main id="main">
+
+    <section class="page-head wrap">
+      <p class="kicker fade">Contact</p>
+      <h1 data-rise>Write to <em>us</em></h1>
+      <p class="standfirst fade">A question, a school, a suggestion. We read everything.</p>
+    </section>
+
+    <section class="wrap" style="padding-bottom:40px">
+      <div class="contact-grid">
+        <div class="fade">
+          <p style="color:var(--soft);max-width:36ch">Your message will open in your own email app, ready to send, so nothing is stored on this page.</p>
+          <dl>
+            <dt>General</dt><dd>hello@mindrise.com</dd>
+            <dt>Schools &amp; institutions</dt><dd>Choose “Schools and institutions” in the form.</dd>
+          </dl>
+        </div>
+        <form id="contactForm" class="fade" data-to="hello@mindrise.com" novalidate>
+          <div class="field"><input id="f-name" name="name" type="text" placeholder=" " autocomplete="name" /><label for="f-name">Your name</label><span class="err" aria-live="polite"></span></div>
+          <div class="field"><input id="f-email" name="email" type="email" placeholder=" " autocomplete="email" /><label for="f-email">Email address</label><span class="err" aria-live="polite"></span></div>
+          <div class="field"><select id="f-topic" name="topic"><option>General question</option><option>Schools and institutions</option><option>Feedback on the products</option><option>Press</option></select><label for="f-topic">About</label><span class="err"></span></div>
+          <div class="field"><textarea id="f-message" name="message" rows="5" placeholder=" "></textarea><label for="f-message">Your message</label><span class="err" aria-live="polite"></span></div>
+          <button class="btn solid" type="submit" data-magnetic>Send message</button>
+          <p class="form-status" id="formStatus" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div id="bigmark" data-text="Mindrise" aria-label="Mindrise">Mindrise</div>
+      <div class="foot-grid">
+        <p>Considered software for students who take their learning seriously.</p>
+        <div><h4>Products</h4><ul><li><a href="products.html#recall">Recall</a></li><li><a href="products.html#plot">Plot</a></li><li><a href="products.html#cadence">Cadence</a></li></ul></div>
+        <div><h4>Mindrise</h4><ul><li><a href="approach.html">Approach</a></li><li><a href="courses.html">Courses</a></li><li><a href="pricing.html">Pricing</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+        <div><h4>Reading</h4><ul><li><button id="setTheme">Reading: paper</button></li><li><button id="setMotion">Motion: on</button></li><li><button id="setSound">Sound: off</button></li></ul></div>
+      </div>
+      <div class="legal"><span>© <span id="year"></span> Mindrise</span><span>Set in Newsreader &amp; Inter</span></div>
+    </div>
+  </footer>
+
+  <script src="js/core.js"></script>
+  <script src="js/ambient.js"></script>
+  <script src="js/contact.js"></script>
+</body>
+</html>

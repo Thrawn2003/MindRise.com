@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="paper">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Products — Mindrise</title>
+  <meta name="description" content="Recall, Plot and Cadence: spaced flashcards, a graphing workspace and a calm focus planner. Try them in the page." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/site.css" />
+</head>
+<body data-scene="dots">
+  <a class="skip" href="#main">Skip to content</a>
+  <div id="progress" aria-hidden="true"></div>
+  <canvas id="field" aria-hidden="true"></canvas>
+  <canvas id="trail" aria-hidden="true"></canvas>
+
+  <header class="site-header" id="header">
+    <a class="wordmark" href="index.html" aria-label="Mindrise, home">Mindrise</a>
+    <nav class="site-nav" id="siteNav" aria-label="Primary">
+      <a href="approach.html">Approach</a>
+      <a href="products.html">Products</a>
+      <a href="courses.html">Courses</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="contact.html">Contact</a>
+      <span class="nav-ink" aria-hidden="true"></span>
+    </nav>
+    <button class="icon-btn" id="themeBtn" aria-label="Switch between paper and night reading">◐</button>
+    <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="siteNav">Menu</button>
+  </header>
+
+  <main id="main">
+
+    <section class="page-head wrap">
+      <p class="kicker fade">Products</p>
+      <h1 data-rise>Three instruments for the <em>working</em> student</h1>
+      <p class="standfirst fade">Each one is small, fast and single-minded. Try them here: everything below works.</p>
+    </section>
+
+    <div class="wrap">
+      <section class="product" id="recall">
+        <div class="product-text">
+          <p class="kicker fade">i. Recall</p>
+          <h2 data-rise>Cards that come back at the right moment</h2>
+          <p class="fade">Write a question, answer it from memory, then say how it felt. Recall schedules the next visit so the hard ones return soon and the easy ones rest.</p>
+          <ul class="fade"><li>Spaced scheduling, no points</li><li>Keyboard first: space to turn, 1 2 3 to grade</li><li>Diagrams and images on either side</li></ul>
+        </div>
+        <div class="specimen rbox fade" id="recallBox" tabindex="-1">
+          <span class="label">Specimen · Recall</span>
+          <div id="recallStage">
+            <div class="rmeta"><span id="rCount">Card 1 of 6</span><span>Space turns · 1 2 3 grades</span></div>
+            <div class="hairline"><i id="rBar"></i></div>
+            <div class="rstage"><div class="rcard" id="rcard" role="button" tabindex="0" aria-label="Flip card"><div class="rface front" id="rFront"></div><div class="rface back" id="rBack"></div></div></div>
+            <div class="rate" id="recallRate">
+              <button data-grade="again" disabled>Again<small>in 10 minutes</small></button>
+              <button data-grade="good" disabled>Good<small>tomorrow</small></button>
+              <button data-grade="easy" disabled>Easy<small>in 4 days</small></button>
+            </div>
+          </div>
+          <div class="rdone" id="recallDone" hidden><h3>Session complete</h3><p id="recallSummary"></p><button class="btn" id="recallRestart">Review again</button></div>
+        </div>
+      </section>
+
+      <section class="product" id="plot">
+        <div class="product-text">
+          <p class="kicker fade">ii. Plot</p>
+          <h2 data-rise>A graph you can think with</h2>
+          <p class="fade">Type an equation and see it at once. Drag the page to explore, zoom to look closer, and hover to read exact values.</p>
+          <ul class="fade"><li>Several functions at once, colour-keyed</li><li>Understands <em>2x</em>, <em>sin(x)</em>, <em>x^2</em> and more</li><li>Asymptotes handled gracefully</li></ul>
+        </div>
+        <div class="specimen fade">
+          <span class="label">Specimen · Plot</span>
+          <div class="fn-inputs">
+            <label class="fn" style="--c: var(--accent)"><span>f₁(x) =</span><input id="fn1" value="sin(x)" spellcheck="false" autocomplete="off" aria-label="Function 1" /></label>
+            <label class="fn" style="--c: var(--brass)"><span>f₂(x) =</span><input id="fn2" value="x^2/8" spellcheck="false" autocomplete="off" aria-label="Function 2" /></label>
+            <label class="fn" style="--c: var(--soft)"><span>f₃(x) =</span><input id="fn3" value="" placeholder="try 3sin(2x)/x" spellcheck="false" autocomplete="off" aria-label="Function 3" /></label>
+          </div>
+          <p class="fn-error" id="fnError" aria-live="polite"></p>
+          <div class="canvas-wrap"><canvas id="graphCanvas" width="800" height="450" aria-label="Graph"></canvas></div>
+          <div class="graph-tools">
+            <div id="graphPresets">
+              <button class="chip" data-f="sin(x)|cos(x)|sin(x)+cos(2x)">Waves</button>
+              <button class="chip" data-f="x^2|-x^2/2+3|(x-2)^2-4">Parabolas</button>
+              <button class="chip" data-f="sin(3x)*exp(-abs(x)/4)|exp(-abs(x)/4)|-exp(-abs(x)/4)">Fading wave</button>
+              <button class="chip" data-f="1/x|tan(x)|sqrt(x)">Curves</button>
+            </div>
+            <button class="chip" id="graphReset">Reset view</button>
+          </div>
+          <p class="hint-line">Drag to pan, scroll to zoom, hover to read values.</p>
+        </div>
+      </section>
+
+      <section class="product" id="cadence">
+        <div class="product-text">
+          <p class="kicker fade">iii. Cadence</p>
+          <h2 data-rise>Focus, with room to breathe</h2>
+          <p class="fade">A session timer that draws a single line, and a short list for today. No sounds unless you want them, no streaks, no guilt.</p>
+          <ul class="fade"><li>Sessions of any length</li><li>A small list, honestly short</li><li>Rests suggested, never enforced</li></ul>
+        </div>
+        <div class="specimen fade">
+          <span class="label">Specimen · Cadence</span>
+          <div class="rmeta"><span>Focus session</span>
+            <span id="cPresets"><button class="chip" data-sec="10">10 sec</button><button class="chip active" data-sec="1500">25 min</button><button class="chip" data-sec="3000" style="margin-right:0">50 min</button></span>
+          </div>
+          <div class="hairline"><i id="cBar" style="transition-duration:.4s;transition-timing-function:linear"></i></div>
+          <div class="cadence-time" id="cTime" role="timer">25:00</div>
+          <div class="cadence-actions"><button class="btn solid" id="cStart">Begin</button><button class="btn" id="cReset">Reset</button></div>
+          <p id="cNote" aria-live="polite"></p>
+          <div class="rmeta" style="margin-top:30px"><span>Today</span><span id="todayCount"></span></div>
+          <ul class="today" id="today">
+            <li><label><input type="checkbox" /><svg class="tick" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M7 12.5l3.2 3.2L17 9"/></svg><span class="txt">Read chapter three</span></label></li>
+            <li><label><input type="checkbox" /><svg class="tick" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M7 12.5l3.2 3.2L17 9"/></svg><span class="txt">Twenty minutes of problem sets</span></label></li>
+            <li><label><input type="checkbox" /><svg class="tick" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M7 12.5l3.2 3.2L17 9"/></svg><span class="txt">Review yesterday’s cards</span></label></li>
+          </ul>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div id="bigmark" data-text="Mindrise" aria-label="Mindrise">Mindrise</div>
+      <div class="foot-grid">
+        <p>Considered software for students who take their learning seriously.</p>
+        <div><h4>Products</h4><ul><li><a href="products.html#recall">Recall</a></li><li><a href="products.html#plot">Plot</a></li><li><a href="products.html#cadence">Cadence</a></li></ul></div>
+        <div><h4>Mindrise</h4><ul><li><a href="approach.html">Approach</a></li><li><a href="courses.html">Courses</a></li><li><a href="pricing.html">Pricing</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+        <div><h4>Reading</h4><ul><li><button id="setTheme">Reading: paper</button></li><li><button id="setMotion">Motion: on</button></li><li><button id="setSound">Sound: off</button></li></ul></div>
+      </div>
+      <div class="legal"><span>© <span id="year"></span> Mindrise</span><span>Set in Newsreader &amp; Inter</span></div>
+    </div>
+  </footer>
+
+  <script src="js/core.js"></script>
+  <script src="js/ambient.js"></script>
+  <script src="js/products.js"></script>
+</body>
+</html>

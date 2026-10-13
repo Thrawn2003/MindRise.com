@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="paper">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pricing — Mindrise</title>
+  <meta name="description" content="Simple pricing for students, scholars and institutions. Start free." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/site.css" />
+</head>
+<body data-scene="halftone">
+  <a class="skip" href="#main">Skip to content</a>
+  <div id="progress" aria-hidden="true"></div>
+  <canvas id="field" aria-hidden="true"></canvas>
+  <canvas id="trail" aria-hidden="true"></canvas>
+
+  <header class="site-header" id="header">
+    <a class="wordmark" href="index.html" aria-label="Mindrise, home">Mindrise</a>
+    <nav class="site-nav" id="siteNav" aria-label="Primary">
+      <a href="approach.html">Approach</a>
+      <a href="products.html">Products</a>
+      <a href="courses.html">Courses</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="contact.html">Contact</a>
+      <span class="nav-ink" aria-hidden="true"></span>
+    </nav>
+    <button class="icon-btn" id="themeBtn" aria-label="Switch between paper and night reading">◐</button>
+    <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="siteNav">Menu</button>
+  </header>
+
+  <main id="main">
+
+    <section class="page-head wrap">
+      <p class="kicker fade">Pricing</p>
+      <h1 data-rise>Plain and <em>fair</em></h1>
+      <p class="standfirst fade">Start free. Pay only when you want more.</p>
+    </section>
+
+    <section class="wrap" style="padding-bottom:60px">
+      <div class="billing fade">
+        <span class="bill-label on" data-mode="monthly">Monthly</span>
+        <button id="billing" role="switch" aria-checked="false" aria-label="Bill yearly"></button>
+        <span class="bill-label" data-mode="yearly">Yearly · save about 20%</span>
+      </div>
+      <div class="plans fade">
+        <article class="plan"><h3>Student</h3><p class="amount"><span data-monthly="$0" data-yearly="$0">$0</span></p><p class="billed">free, always</p>
+          <ul><li>Three courses</li><li>Recall, up to 200 cards</li><li>Plot and Cadence</li></ul><a class="btn" href="contact.html">Begin</a></article>
+        <article class="plan featured"><h3>Scholar</h3><p class="amount"><span data-monthly="$9" data-yearly="$7">$9</span></p><p class="billed billed-live">billed monthly</p>
+          <ul><li>Every course</li><li>Unlimited cards and graphs</li><li>Notes you can export</li></ul><a class="btn solid" href="contact.html">Choose Scholar</a></article>
+        <article class="plan"><h3>Institution</h3><p class="amount"><span data-monthly="$29" data-yearly="$24">$29</span></p><p class="billed billed-live">billed monthly</p>
+          <ul><li>Up to forty learners</li><li>Assign courses</li><li>A class overview, never a ranking</li></ul><a class="btn" href="contact.html">Talk to us</a></article>
+      </div>
+    </section>
+
+    <section class="wrap" style="padding-bottom:40px">
+      <header class="section-head"><span class="num">Questions</span><h2 data-rise>Good to know</h2></header>
+      <div class="faq">
+        <div class="faq-item"><button class="faq-q" aria-expanded="false">Can I start without paying?<span class="plus" aria-hidden="true"></span></button><div class="faq-a"><div><p>Yes. The Student plan is free and you can stay on it as long as you like.</p></div></div></div>
+        <div class="faq-item"><button class="faq-q" aria-expanded="false">What changes on Scholar?<span class="plus" aria-hidden="true"></span></button><div class="faq-a"><div><p>You get every course, no limits on cards or graphs, and the ability to export your notes whenever you like.</p></div></div></div>
+        <div class="faq-item"><button class="faq-q" aria-expanded="false">How do schools use Mindrise?<span class="plus" aria-hidden="true"></span></button><div class="faq-a"><div><p>Teachers assign courses and see where a class is. We deliberately do not rank students against one another.</p></div></div></div>
+        <div class="faq-item"><button class="faq-q" aria-expanded="false">What happens to my notes?<span class="plus" aria-hidden="true"></span></button><div class="faq-a"><div><p>They are yours. You can export them at any time, and we do not sell them.</p></div></div></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div id="bigmark" data-text="Mindrise" aria-label="Mindrise">Mindrise</div>
+      <div class="foot-grid">
+        <p>Considered software for students who take their learning seriously.</p>
+        <div><h4>Products</h4><ul><li><a href="products.html#recall">Recall</a></li><li><a href="products.html#plot">Plot</a></li><li><a href="products.html#cadence">Cadence</a></li></ul></div>
+        <div><h4>Mindrise</h4><ul><li><a href="approach.html">Approach</a></li><li><a href="courses.html">Courses</a></li><li><a href="pricing.html">Pricing</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+        <div><h4>Reading</h4><ul><li><button id="setTheme">Reading: paper</button></li><li><button id="setMotion">Motion: on</button></li><li><button id="setSound">Sound: off</button></li></ul></div>
+      </div>
+      <div class="legal"><span>© <span id="year"></span> Mindrise</span><span>Set in Newsreader &amp; Inter</span></div>
+    </div>
+  </footer>
+
+  <script src="js/core.js"></script>
+  <script src="js/ambient.js"></script>
+  <script src="js/pricing.js"></script>
+</body>
+</html>
