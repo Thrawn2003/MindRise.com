@@ -74,8 +74,7 @@
     motes = Array.from({ length: n }, () => ({ x: rand(0, w), y: rand(0, h), z: rand(0.35, 1), r: rand(0.7, 1.9), vx: 0, vy: 0, ph: rand(0, TAU) }));
   }
 
-  function paint() {
-    ctx.clearRect(0, 0, w, h);
+  function paintDust() {
     const night = root.dataset.theme === 'night';
     const lean = ptr.x === OFF ? 0 : (ptr.x / w - 0.5) * 0.05;
     beams.forEach((b, i) => {
@@ -112,7 +111,7 @@
     });
   }
 
-  function step(dt) {
+  function stepDust(dt) {
     const speed = 1 - calm * 0.65;
     if (ptr.x !== OFF && lastPx !== OFF) {
       cvx = lerp(cvx, ptr.x - lastPx, 0.3);
@@ -151,15 +150,35 @@
     canvas.width = w * dpr;
     canvas.height = h * dpr;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    seedMotes();
+    const sc = activeKey && M.scenes[activeKey];
+    if (sc && sc.init) sc.init();
     paint();
   }
   addEventListener('resize', resize);
-  M.bus.addEventListener('settings', () => { setLamp(); paint(); });
+
+  // scenes are swappable: dust lives here, the others register themselves from backgrounds.js
+  M.scenes = M.scenes || {};
+  M.scenes.dust = { init: seedMotes, step: stepDust, paint: paintDust };
+  let activeKey = null;
+  function ensureScene() {
+    const key = M.surface().scene || null;
+    if (key === activeKey) return;
+    activeKey = key;
+    ctx.clearRect(0, 0, w, h);
+    canvas.style.display = key ? '' : 'none';
+    const sc = key && M.scenes[key];
+    if (sc && sc.init) sc.init();
+  }
+  function paint() {
+    ctx.clearRect(0, 0, w, h);
+    const sc = activeKey && M.scenes[activeKey];
+    if (sc) sc.paint();
+  }
+  M.bus.addEventListener('settings', () => { setLamp(); ensureScene(); paint(); });
 
   // a click on blank paper lets out a breath of air
   addEventListener('pointerdown', (e) => {
-    if (!motionOn() || e.target.closest('a, button, input, textarea, select, label, summary, canvas, .card, .specimen, mark, .term')) return;
+    if (activeKey !== 'dust' || !motionOn() || e.target.closest('a, button, input, textarea, select, label, summary, canvas, .card, .specimen, mark, .term')) return;
     motes.forEach((m) => {
       const dx = m.x - e.clientX, dy = screenY(m) - e.clientY, d = Math.hypot(dx, dy);
       if (d < 260) {
@@ -186,10 +205,11 @@
   const greet = $('#greet');
   if (greet) greet.textContent = hrNow >= 5 && hrNow < 12 ? 'Good morning' : hrNow < 17 && hrNow >= 12 ? 'Good afternoon' : hrNow >= 17 && hrNow < 22 ? 'Good evening' : 'A quiet hour';
 
+  ensureScene();
   resize();
   (function loop(now) {
     requestAnimationFrame(loop);
-    if (document.hidden || !motionOn()) return;
+    if (document.hidden || !motionOn() || !activeKey) return;
     const dt = Math.min((now - lastNow) / 1000 || 0, 0.05);
     lastNow = now;
     clock += dt;
@@ -199,9 +219,17 @@
       ptr.x = ptr.x === OFF ? ptr.tx : lerp(ptr.x, ptr.tx, 0.18);
       ptr.y = ptr.y === OFF ? ptr.ty : lerp(ptr.y, ptr.ty, 0.18);
     }
-    step(dt);
+    const sc = M.scenes[activeKey];
+    if (sc && sc.step) sc.step(dt);
     paint();
   })(0);
+
+  // shared tools for the other scenes
+  M.bg = {
+    ctx, ptr, OFF, TAU, noise, lerp, clamp, rand,
+    get w() { return w; }, get h() { return h; }, get clock() { return clock; }, get calm() { return calm; },
+    refresh() { activeKey = null; ensureScene(); paint(); },
+  };
 
   /* =========================================================
      Header: quiet on the way down, back on the way up
@@ -260,7 +288,7 @@
     const open = header.classList.toggle('nav-open');
     e.currentTarget.setAttribute('aria-expanded', String(open));
   });
-  $('#themeBtn').addEventListener('click', () => M.set({ theme: M.settings.theme === 'night' ? 'paper' : 'night' }));
+  $('#themeBtn').addEventListener('click', () => M.toggleTheme());
 
   /* =========================================================
      Reveal: headings rise word by word, paragraphs fade up
@@ -548,11 +576,11 @@
     soundBtn.setAttribute('aria-pressed', String(M.settings.sound));
     motionBtn.textContent = M.settings.motion ? 'Motion: on' : 'Motion: still';
     motionBtn.setAttribute('aria-pressed', String(M.settings.motion));
-    themeLabel.textContent = M.settings.theme === 'night' ? 'Reading: night' : 'Reading: paper';
+    themeLabel.textContent = M.effectiveTheme() === 'night' ? 'Reading: night' : 'Reading: paper';
   };
   soundBtn.addEventListener('click', () => { M.set({ sound: !M.settings.sound }); M.sfx.note(3); });
   motionBtn.addEventListener('click', () => M.set({ motion: !M.settings.motion }));
-  themeLabel.addEventListener('click', () => M.set({ theme: M.settings.theme === 'night' ? 'paper' : 'night' }));
+  themeLabel.addEventListener('click', () => M.toggleTheme());
   M.bus.addEventListener('settings', syncControls);
   syncControls();
 

@@ -34,24 +34,65 @@
   const prefersReduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const finePointer = matchMedia('(pointer: fine)').matches;
 
+  /* ---------- Backgrounds (the "surface" the whole site sits on) ---------- */
+  // alive: responds to you, drawn on the canvas.  still: nothing moves.
+  // neutral surfaces follow the paper/night reading mode; tinted ones carry their own palette.
+  const SURFACES = [
+    { id: 'window', label: 'Window light', group: 'alive', scene: 'dust', neutral: true },
+    { id: 'water', label: 'Still water', group: 'alive', scene: 'ripples', neutral: true },
+    { id: 'contour', label: 'Contours', group: 'alive', scene: 'contour', neutral: true },
+    { id: 'wash', label: 'Colour wash', group: 'alive', scene: 'wash', neutral: true },
+    { id: 'paper', label: 'Plain paper', group: 'still', neutral: true },
+    { id: 'linen', label: 'Linen', group: 'still', neutral: true, texture: 'linen' },
+    { id: 'grid', label: 'Graph paper', group: 'still', neutral: true, texture: 'grid' },
+    { id: 'sage', label: 'Sage', group: 'still', dark: false, vars: { '--bg': '#dde6da', '--paper': '#e9f0e6', '--ink': '#1c2a20', '--soft': '#44574a', '--mute': '#56675a', '--rule': 'rgba(28,42,32,0.18)', '--accent': '#8a3a2b', '--brass': '#7d7336' } },
+    { id: 'rose', label: 'Rosewater', group: 'still', dark: false, vars: { '--bg': '#f0dedb', '--paper': '#f8ebe8', '--ink': '#2b1c1d', '--soft': '#5e4546', '--mute': '#735e5f', '--rule': 'rgba(43,28,29,0.18)', '--accent': '#7a2336', '--brass': '#a2703a' } },
+    { id: 'fog', label: 'Fog', group: 'still', dark: false, vars: { '--bg': '#e3e6ea', '--paper': '#eef0f3', '--ink': '#1b2027', '--soft': '#485260', '--mute': '#5a636f', '--rule': 'rgba(27,32,39,0.17)', '--accent': '#2d5a88', '--brass': '#8a7a4a' } },
+    { id: 'butter', label: 'Butter', group: 'still', dark: false, vars: { '--bg': '#f3e8c8', '--paper': '#f9f1da', '--ink': '#2a2316', '--soft': '#5c5036', '--mute': '#6f654a', '--rule': 'rgba(42,35,22,0.18)', '--accent': '#8c3b22', '--brass': '#9a7424' } },
+    { id: 'dusk', label: 'Dusk', group: 'still', dark: true, vars: { '--bg': '#1c2332', '--paper': '#232b3d', '--ink': '#e8eaf1', '--soft': '#b6bdce', '--mute': '#818ba2', '--rule': 'rgba(232,234,241,0.18)', '--accent': '#e3ab8c', '--brass': '#d8b46a' } },
+    { id: 'walnut', label: 'Walnut', group: 'still', dark: true, vars: { '--bg': '#241b15', '--paper': '#2d221a', '--ink': '#f0e4d4', '--soft': '#c6b49e', '--mute': '#968471', '--rule': 'rgba(240,228,212,0.18)', '--accent': '#e49c6d', '--brass': '#d3a85a' } },
+    { id: 'graphite', label: 'Graphite', group: 'still', dark: true, vars: { '--bg': '#16181b', '--paper': '#1e2125', '--ink': '#e9eaec', '--soft': '#b4b8bf', '--mute': '#81868f', '--rule': 'rgba(233,234,236,0.17)', '--accent': '#dc8c76', '--brass': '#c9a862' } },
+  ];
+  const VAR_KEYS = ['--bg', '--paper', '--ink', '--soft', '--mute', '--rule', '--accent', '--brass'];
+  const surfaceById = (id) => SURFACES.find((x) => x.id === id) || SURFACES[0];
+
   /* ---------- Settings ---------- */
   const root = document.documentElement;
   const saved = store.get('settings', {});
   const settings = {
-    theme: saved.theme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'night' : 'paper'),
+    theme: saved.theme === 'night' || saved.theme === 'paper' ? saved.theme : (matchMedia('(prefers-color-scheme: dark)').matches ? 'night' : 'paper'),
     motion: saved.motion !== undefined ? saved.motion : !prefersReduced,
     sound: saved.sound === true, // always off until someone asks for it
+    surface: surfaceById(saved.surface).id,
   };
   const bus = new EventTarget();
+  const surface = () => surfaceById(settings.surface);
+  const effectiveTheme = () => {
+    const sf = surface();
+    return sf.neutral ? settings.theme : sf.dark ? 'night' : 'paper';
+  };
   function apply() {
-    root.dataset.theme = settings.theme;
+    const sf = surface();
+    root.dataset.theme = effectiveTheme();
+    root.dataset.surface = sf.id;
+    root.dataset.flat = sf.scene ? 'off' : 'on';
+    root.dataset.lamp = sf.id === 'window' ? 'on' : 'off';
+    root.dataset.texture = sf.texture || 'none';
     root.dataset.motion = settings.motion ? 'on' : 'off';
+    VAR_KEYS.forEach((k) => root.style.removeProperty(k));
+    if (!sf.neutral) Object.entries(sf.vars).forEach(([k, v]) => root.style.setProperty(k, v));
     store.set('settings', settings);
     bus.dispatchEvent(new CustomEvent('settings', { detail: settings }));
   }
   const set = (patch) => {
     Object.assign(settings, patch);
     apply();
+  };
+  // the header/footer light switch: on a tinted surface it returns to window light in the opposite mode
+  const toggleTheme = () => {
+    const sf = surface();
+    if (sf.neutral) set({ theme: settings.theme === 'night' ? 'paper' : 'night' });
+    else set({ surface: 'window', theme: sf.dark ? 'paper' : 'night' });
   };
   apply();
 
@@ -96,7 +137,7 @@
 
   window.Mindrise = {
     $, $$, store, clamp, lerp, rand, pad, fmtTime, css, rgba, prefersReduced, finePointer,
-    settings, set, bus, sfx,
+    settings, set, bus, sfx, SURFACES, surface, surfaceById, effectiveTheme, toggleTheme,
     get motion() { return settings.motion; },
   };
 })();

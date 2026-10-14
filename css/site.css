@@ -4,7 +4,7 @@
   --paper: #f9f6ee;
   --ink: #1f1c18;
   --soft: #5d554b;
-  --mute: #8d8579;
+  --mute: #6e685e;
   --rule: rgba(31, 28, 24, 0.16);
   --accent: #7d2f2f;
   --brass: #a9813a;
@@ -490,3 +490,44 @@ mark.hl:hover { background: linear-gradient(transparent 18%, color-mix(in srgb, 
 .next-link .arr { font-size: clamp(2rem, 5vw, 4rem); color: var(--accent); transition: transform 0.9s var(--ease); }
 .next-link:hover .arr { transform: translateX(18px); }
 .next-link:hover .next-title { color: var(--accent); transform: translateX(10px); }
+
+/* =====================================================================
+   Backgrounds: still surfaces, textures and the picker
+   ===================================================================== */
+[data-lamp="off"] body::before { display: none; }
+[data-flat="on"] body::after { display: none; }
+[data-texture="linen"] body {
+  background-image:
+    repeating-linear-gradient(0deg, color-mix(in srgb, var(--ink) 4.5%, transparent) 0 1px, transparent 1px 4px),
+    repeating-linear-gradient(90deg, color-mix(in srgb, var(--ink) 3.5%, transparent) 0 1px, transparent 1px 4px);
+}
+[data-texture="grid"] body {
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--ink) 9%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--ink) 9%, transparent) 1px, transparent 1px),
+    linear-gradient(color-mix(in srgb, var(--ink) 4.5%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--ink) 4.5%, transparent) 1px, transparent 1px);
+  background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px;
+}
+
+#bgPanel { position: fixed; right: var(--gutter); bottom: 24px; z-index: 170; width: min(460px, calc(100vw - 2 * var(--gutter))); max-height: calc(100svh - 48px); overflow: auto; padding: 22px 22px 18px; background: var(--paper); border: 1px solid var(--rule); box-shadow: 0 30px 70px rgba(0, 0, 0, 0.22); opacity: 0; transform: translateY(14px); transition: opacity 0.35s, transform 0.55s var(--ease); }
+#bgPanel.on { opacity: 1; transform: none; }
+#bgPanel header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+#bgPanel h3 { font-size: 1.6rem; font-style: italic; }
+.bg-close { background: none; border: 0; font-size: 1.7rem; line-height: 1; cursor: pointer; color: var(--soft); transition: transform 0.4s var(--ease), color 0.3s; }
+.bg-close:hover { transform: rotate(90deg); color: var(--ink); }
+.bg-group h4 { display: flex; gap: 10px; align-items: baseline; margin: 18px 0 10px; font: 500 0.66rem var(--sans); letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); }
+.bg-group h4 span { font: italic 0.92rem var(--serif); letter-spacing: 0; text-transform: none; color: var(--mute); }
+.bg-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px 10px; }
+.bg-opt { display: grid; gap: 6px; padding: 0; background: none; border: 0; cursor: pointer; text-align: left; font: 0.74rem var(--sans); color: var(--soft); transition: color 0.3s; }
+.bg-swatch { display: block; aspect-ratio: 4 / 3; border: 1px solid var(--rule); transition: transform 0.5s var(--ease), box-shadow 0.4s; }
+.bg-opt:hover .bg-swatch, .bg-opt:focus-visible .bg-swatch { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.14); }
+.bg-opt[aria-checked="true"] { color: var(--ink); }
+.bg-opt[aria-checked="true"] .bg-swatch { outline: 2px solid var(--accent); outline-offset: 2px; }
+.bg-foot { margin-top: 18px; font: italic 0.92rem var(--serif); color: var(--mute); }
+#bgCaption { position: fixed; left: 50%; bottom: 28px; z-index: 170; padding: 10px 20px; background: var(--ink); color: var(--bg); font: 500 0.66rem var(--sans); letter-spacing: 0.2em; text-transform: uppercase; opacity: 0; pointer-events: none; transform: translate(-50%, 10px); transition: opacity 0.35s, transform 0.55s var(--ease); }
+#bgCaption.on { opacity: 1; transform: translate(-50%, 0); }
+@media (max-width: 560px) {
+  .bg-grid { grid-template-columns: repeat(3, 1fr); }
+  #bgPanel { left: 12px; right: 12px; bottom: 12px; width: auto; }
+}
