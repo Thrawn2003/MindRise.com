@@ -4,7 +4,7 @@
   --paper: #f9f6ee;
   --ink: #1f1c18;
   --soft: #5d554b;
-  --mute: #6e685e;
+  --mute: #655f56;
   --rule: rgba(31, 28, 24, 0.16);
   --accent: #7d2f2f;
   --brass: #a9813a;
@@ -20,7 +20,7 @@
   --paper: #1b1814;
   --ink: #ece4d4;
   --soft: #bdb3a2;
-  --mute: #8b8273;
+  --mute: #938a7b;
   --rule: rgba(236, 228, 212, 0.18);
   --accent: #dc8c76;
   --brass: #d3a85a;
@@ -304,7 +304,7 @@ section.block { padding: clamp(70px, 10vw, 140px) 0; position: relative; }
 #billing { position: relative; width: 52px; height: 26px; border: 1px solid var(--ink); background: transparent; cursor: pointer; }
 #billing::after { content: ""; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; background: var(--ink); transition: transform 0.55s var(--ease); }
 #billing[aria-checked="true"]::after { transform: translateX(26px); background: var(--accent); }
-.plans { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--rule); background: color-mix(in srgb, var(--paper) 80%, transparent); }
+.plans { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--rule); background: color-mix(in srgb, var(--paper) 80%, transparent); }
 .plan { position: relative; padding: clamp(28px, 3.6vw, 50px); display: flex; flex-direction: column; border-left: 1px solid var(--rule); transition: background 0.5s; }
 .plan:first-child { border-left: 0; }
 .plan:hover { background: color-mix(in srgb, var(--accent) 5%, transparent); }
@@ -496,18 +496,19 @@ mark.hl:hover { background: linear-gradient(transparent 18%, color-mix(in srgb, 
    ===================================================================== */
 [data-lamp="off"] body::before { display: none; }
 [data-flat="on"] body::after { display: none; }
+html { background: var(--bg); }
 [data-texture="linen"] body {
   background-image:
-    repeating-linear-gradient(0deg, color-mix(in srgb, var(--ink) 4.5%, transparent) 0 1px, transparent 1px 4px),
-    repeating-linear-gradient(90deg, color-mix(in srgb, var(--ink) 3.5%, transparent) 0 1px, transparent 1px 4px);
+    repeating-linear-gradient(0deg, var(--tex) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(90deg, var(--tex) 0 1px, transparent 1px 3px);
 }
 [data-texture="grid"] body {
   background-image:
-    linear-gradient(color-mix(in srgb, var(--ink) 9%, transparent) 1px, transparent 1px),
-    linear-gradient(90deg, color-mix(in srgb, var(--ink) 9%, transparent) 1px, transparent 1px),
-    linear-gradient(color-mix(in srgb, var(--ink) 4.5%, transparent) 1px, transparent 1px),
-    linear-gradient(90deg, color-mix(in srgb, var(--ink) 4.5%, transparent) 1px, transparent 1px);
-  background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px;
+    linear-gradient(var(--tex) 1px, transparent 1px),
+    linear-gradient(90deg, var(--tex) 1px, transparent 1px),
+    linear-gradient(var(--tex2) 1px, transparent 1px),
+    linear-gradient(90deg, var(--tex2) 1px, transparent 1px);
+  background-size: 96px 96px, 96px 96px, 24px 24px, 24px 24px;
 }
 
 #bgPanel { position: fixed; right: var(--gutter); bottom: 24px; z-index: 170; width: min(460px, calc(100vw - 2 * var(--gutter))); max-height: calc(100svh - 48px); overflow: auto; padding: 22px 22px 18px; background: var(--paper); border: 1px solid var(--rule); box-shadow: 0 30px 70px rgba(0, 0, 0, 0.22); opacity: 0; transform: translateY(14px); transition: opacity 0.35s, transform 0.55s var(--ease); }
@@ -534,3 +535,13 @@ mark.hl:hover { background: linear-gradient(transparent 18%, color-mix(in srgb, 
 
 .bg-note { margin-top: 16px; padding: 10px 12px; border: 1px solid var(--rule); font-size: 0.92rem; color: var(--soft); }
 .bg-note button { margin-left: 6px; background: none; border: 0; padding: 0; font: 500 0.66rem var(--sans); letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); cursor: pointer; border-bottom: 1px solid var(--accent); }
+
+/* four plans: students, educators, schools */
+.plan .who { font: 500 0.62rem var(--sans); letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+.plan.featured .who { margin-top: 4px; }
+.amount.word { font-size: 2.6rem; padding-top: 0.45rem; }
+@media (min-width: 961px) and (max-width: 1180px) {
+  .plans { grid-template-columns: repeat(2, 1fr); }
+  .plan:nth-child(3) { border-left: 0; border-top: 1px solid var(--rule); }
+  .plan:nth-child(4) { border-top: 1px solid var(--rule); }
+}

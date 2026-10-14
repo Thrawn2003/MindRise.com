@@ -23,9 +23,12 @@ Open `index.html` in a browser, or serve the folder (`python3 -m http.server`).
 
 Script order matters: `core.js`, then `ambient.js`, then the page script.
 
+## Audience
+The copy is written for three groups: students (free tools and self-paced courses), educators (assigning work and a class overview, with no ranking) and schools/districts (whole-school access). The plans on `pricing.html` have anchors (`#student`, `#plus`, `#educator`, `#school`) that other pages link to.
+
 ## Notes
-- Backgrounds: visitors choose one in the footer (Reading → Background), or press `B` to cycle. Alive: Window light (default), Still water, Contours, Colour wash. Still, nothing moves: Plain paper, Linen, Graph paper, and the solid colours Sage, Rosewater, Fog, Butter, Dusk, Walnut, Graphite. The choice is remembered. Add or edit options in the `SURFACES` list in `js/core.js`.
+- Backgrounds: visitors choose one in the footer (Reading → Background), or press `B` to cycle (Shift+B goes back). Each has its own colours, so changing it is always clearly visible. Alive (7): Window light (default), Still water, Deep water, Contours, Night map, Colour wash, Aurora. Still, nothing moves (10): Plain paper, Linen, Graph paper, Sage, Rosewater, Fog, Butter, Dusk, Walnut, Graphite. The choice is remembered. Add or edit options in the `SURFACES` list in `js/core.js`.
 - Visitors can also switch motion off from the footer, which freezes the alive backgrounds.
 - Visitors can switch off motion or switch on sound from the footer; sound is off by default.
-- Pricing, plan limits, FAQ answers, course details and the contact address (`hello@mindrise.com`) are placeholders. Change the address in `contact.html` (`data-to`).
+- Pricing, plan limits, feature descriptions for educators (assigning, class overview), privacy statements, FAQ answers, course details and the contact address (`hello@mindrise.com`) are placeholders to be confirmed before launch. Change the address in `contact.html` (`data-to`).
 - Fonts (Newsreader, Inter) load from Google Fonts; the site falls back to system serif/sans without them.

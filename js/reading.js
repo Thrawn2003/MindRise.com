@@ -6,7 +6,7 @@
   const paras = $$('.chapter p');
   if (!paras.length) return;
 
-  const KEY = 'marks:' + (location.pathname.split('/').pop() || 'index.html');
+  const KEY = 'marks2:' + (location.pathname.split('/').pop() || 'index.html');
   let marks = M.store.get(KEY, []); // { id, p, s, e }: paragraph index, start and end offsets
   const save = () => M.store.set(KEY, marks);
   const count = $('#markCount');
@@ -74,13 +74,16 @@
     return { idx: paras.indexOf(p), s, e: s + r.toString().length, rect: r.getBoundingClientRect() };
   }
 
-  document.addEventListener('selectionchange', () => {
+  function refresh() {
     pending = selection();
     if (!pending) { btn.classList.remove('on'); return; }
     btn.style.left = `${Math.min(Math.max(pending.rect.left + pending.rect.width / 2, 40), innerWidth - 40)}px`;
     btn.style.top = `${pending.rect.top}px`;
     btn.classList.add('on');
-  });
+  }
+  // selectionchange alone can lag or be skipped, so also check when the pointer or keys are released
+  document.addEventListener('selectionchange', refresh);
+  ['mouseup', 'touchend', 'keyup'].forEach((evt) => document.addEventListener(evt, () => setTimeout(refresh, 30)));
 
   function addMark() {
     if (!pending) return;

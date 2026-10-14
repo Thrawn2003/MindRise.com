@@ -357,9 +357,7 @@
         walk(ch, copy);
       }
     });
-    el.setAttribute('aria-label', el.textContent.trim().replace(/\s+/g, ' '));
     walk(el, holder);
-    holder.setAttribute('aria-hidden', 'true');
     el.textContent = '';
     el.appendChild(holder);
     return { el, words };
@@ -413,6 +411,7 @@
   gloss.className = 'gloss';
   gloss.setAttribute('role', 'tooltip');
   gloss.id = 'gloss';
+  gloss.setAttribute('aria-hidden', 'true');
   document.body.appendChild(gloss);
   let glossFor = null;
   function showGloss(term) {
@@ -424,6 +423,7 @@
     p.textContent = term.dataset.def;
     gloss.append(b, p);
     gloss.classList.add('on');
+    gloss.removeAttribute('aria-hidden');
     const r = term.getBoundingClientRect();
     const gw = gloss.offsetWidth;
     gloss.style.left = `${clamp(r.left + r.width / 2 - gw / 2, 12, innerWidth - gw - 12)}px`;
@@ -431,7 +431,7 @@
     gloss.style.top = `${above ? r.top - gloss.offsetHeight - 10 : r.bottom + 10}px`;
     term.setAttribute('aria-describedby', 'gloss');
   }
-  const hideGloss = () => { gloss.classList.remove('on'); if (glossFor) glossFor.removeAttribute('aria-describedby'); glossFor = null; };
+  const hideGloss = () => { gloss.classList.remove('on'); gloss.setAttribute('aria-hidden', 'true'); if (glossFor) glossFor.removeAttribute('aria-describedby'); glossFor = null; };
   $$('.term').forEach((t) => {
     t.tabIndex = 0;
     t.addEventListener('mouseenter', () => showGloss(t));
@@ -508,6 +508,7 @@
     const text = el.dataset.text || el.textContent.trim();
     el.textContent = '';
     el.setAttribute('aria-label', text);
+    if (!/^H[1-6]$/.test(el.tagName)) el.setAttribute('role', 'img');
     const letters = [];
     text.split(' ').forEach((word, wi, arr) => {
       const wEl = document.createElement('span');

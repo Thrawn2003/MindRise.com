@@ -15,6 +15,9 @@
     if (key !== colorKey) {
       colorKey = key;
       colors = { ink: css('--ink'), accent: css('--accent'), brass: css('--brass'), soft: css('--soft') };
+      colors.w1 = css('--w1') || colors.accent;
+      colors.w2 = css('--w2') || colors.brass;
+      colors.w3 = css('--w3') || colors.soft;
     }
     return colors;
   };
@@ -44,10 +47,10 @@
       rings = rings.filter((r) => r.r < r.max).slice(-40);
     },
     paint() {
-      ctx.lineWidth = 1.1;
+      ctx.lineWidth = 1.5;
       const c = palette().ink;
       rings.forEach((r) => {
-        const k = Math.pow(1 - r.r / r.max, 1.5) * r.a;
+        const k = Math.min(0.75, Math.pow(1 - r.r / r.max, 1.2) * r.a * 1.9);
         ctx.strokeStyle = rgba(c, k);
         ctx.beginPath(); ctx.arc(r.x, r.y, r.r, 0, TAU); ctx.stroke();
         ctx.strokeStyle = rgba(c, k * 0.5);
@@ -90,11 +93,11 @@
       if (!M.motion) this.step(); // a still frame still needs its map
       ctx.lineCap = 'round';
       ctx.strokeStyle = palette().ink;
-      for (let li = 0; li < 8; li++) {
-        const L = 0.3 + li * 0.07;
+      for (let li = 0; li < 9; li++) {
+        const L = 0.26 + li * 0.065;
         const major = li % 3 === 0;
-        ctx.globalAlpha = major ? 0.2 : 0.1;
-        ctx.lineWidth = major ? 1.1 : 0.75;
+        ctx.globalAlpha = major ? 0.5 : 0.28;
+        ctx.lineWidth = major ? 1.5 : 0.9;
         ctx.beginPath();
         for (let r = 0; r < rows - 1; r++) {
           for (let c = 0; c < cols - 1; c++) {
@@ -128,11 +131,11 @@
 
   /* ---------- Colour wash: large soft pools of colour that drift and lean toward you ---------- */
   const pools = [
-    { tone: 'accent', x: 0.2, y: 0.25, r: 0.42, seed: 3, depth: 1 },
-    { tone: 'brass', x: 0.78, y: 0.2, r: 0.36, seed: 11, depth: 0.7 },
-    { tone: 'soft', x: 0.6, y: 0.75, r: 0.46, seed: 19, depth: 1.2 },
-    { tone: 'accent', x: 0.1, y: 0.85, r: 0.3, seed: 27, depth: 0.5 },
-    { tone: 'brass', x: 0.9, y: 0.7, r: 0.3, seed: 35, depth: 0.9 },
+    { tone: 'w1', x: 0.18, y: 0.25, r: 0.5, seed: 3, depth: 1 },
+    { tone: 'w2', x: 0.82, y: 0.2, r: 0.44, seed: 11, depth: 0.7 },
+    { tone: 'w3', x: 0.6, y: 0.78, r: 0.55, seed: 19, depth: 1.2 },
+    { tone: 'w1', x: 0.1, y: 0.88, r: 0.36, seed: 27, depth: 0.5 },
+    { tone: 'w2', x: 0.92, y: 0.72, r: 0.38, seed: 35, depth: 0.9 },
   ];
   M.scenes.wash = {
     init() {},
@@ -147,7 +150,7 @@
         const y = B.h * (p.y + 0.09 * (noise(p.seed + 50, B.clock * 0.03, sc) - 0.5) * 2) + my * 70 * p.depth;
         const rad = Math.max(B.w, B.h) * p.r;
         const g = ctx.createRadialGradient(x, y, 0, x, y, rad);
-        g.addColorStop(0, rgba(c[p.tone], dark ? 0.17 : 0.2));
+        g.addColorStop(0, rgba(c[p.tone], dark ? 0.42 : 0.5));
         g.addColorStop(1, rgba(c[p.tone], 0));
         ctx.fillStyle = g;
         ctx.fillRect(0, 0, B.w, B.h);
@@ -168,16 +171,17 @@
 
   const NEUTRAL = { paper: { bg: '#f3eee4', ink: '#1f1c18', acc: '#7d2f2f' }, night: { bg: '#15130f', ink: '#ece4d4', acc: '#dc8c76' } };
   const preview = (sf) => {
-    const p = sf.neutral ? NEUTRAL[M.settings.theme] : { bg: sf.vars['--bg'], ink: sf.vars['--ink'], acc: sf.vars['--accent'] };
+    const p = sf.neutral ? { ...NEUTRAL[M.settings.theme], w1: NEUTRAL[M.settings.theme].acc, w3: NEUTRAL[M.settings.theme].ink } : { bg: sf.vars['--bg'], ink: sf.vars['--ink'], acc: sf.vars['--accent'], w1: sf.vars['--w1'] || sf.vars['--accent'], w3: sf.vars['--w3'] || sf.vars['--ink'] };
+    const key = sf.texture || (sf.scene === 'dust' ? 'window' : sf.scene) || '';
     const art = {
       window: `radial-gradient(circle at 70% 20%, ${p.acc}33, transparent 45%), radial-gradient(2px 2px at 30% 60%, ${p.ink}88, transparent), radial-gradient(1.5px 1.5px at 55% 40%, ${p.ink}77, transparent), radial-gradient(2px 2px at 78% 70%, ${p.ink}66, transparent)`,
-      water: `repeating-radial-gradient(circle at 40% 55%, transparent 0 7px, ${p.ink}33 7px 8px)`,
+      ripples: `repeating-radial-gradient(circle at 40% 55%, transparent 0 7px, ${p.ink}33 7px 8px)`,
       contour: `repeating-radial-gradient(ellipse at 35% 60%, transparent 0 6px, ${p.ink}2e 6px 7px)`,
-      wash: `radial-gradient(circle at 25% 30%, ${p.acc}66, transparent 55%), radial-gradient(circle at 80% 80%, ${p.ink}33, transparent 55%)`,
+      wash: `radial-gradient(circle at 25% 30%, ${p.w1}aa, transparent 55%), radial-gradient(circle at 80% 75%, ${p.w3}99, transparent 55%)`,
       linen: `repeating-linear-gradient(0deg, ${p.ink}22 0 1px, transparent 1px 4px), repeating-linear-gradient(90deg, ${p.ink}1a 0 1px, transparent 1px 4px)`,
       grid: `linear-gradient(${p.ink}2a 1px, transparent 1px), linear-gradient(90deg, ${p.ink}2a 1px, transparent 1px)`,
-    }[sf.id] || 'none';
-    const size = sf.id === 'grid' ? 'background-size:10px 10px' : sf.id === 'linen' ? 'background-size:auto' : '';
+    }[key] || 'none';
+    const size = sf.id === 'grid' ? 'background-size:10px 10px' : '';
     return `background-color:${p.bg};background-image:${art};${size}`;
   };
 
