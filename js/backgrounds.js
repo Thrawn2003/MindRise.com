@@ -2,6 +2,7 @@
    Still surfaces (paper, linen, graph paper and the solid colours) are handled by core.js and css/site.css. */
 (() => {
   const M = window.Mindrise;
+  if (!M || !M.bg || !M.SURFACES || !M.scenes || !document.querySelector('#setSurface')) return; // mismatched cached files: stay out of the way
   const { $, clamp, css } = M;
   const B = M.bg;
   const { ctx, ptr, OFF, TAU, noise, lerp, rand } = B;
@@ -24,15 +25,19 @@
   let rings = [];
   let lastX = OFF, lastY = OFF, lastAt = -9, idle = 0;
   M.scenes.ripples = {
-    init() { rings = []; idle = 1; },
+    init() {
+      // start with a few rings already spreading, so a still frame is never empty
+      rings = Array.from({ length: 7 }, () => { const max = rand(90, 170); return { x: rand(0, B.w), y: rand(0, B.h), r: rand(8, max * 0.7), max, sp: 0.4, a: 0.2 }; });
+      idle = 1;
+    },
     step(dt) {
       if (ptr.x !== OFF && Math.hypot(ptr.x - lastX, ptr.y - lastY) > 70 && B.clock - lastAt > 0.25) {
-        rings.push({ x: ptr.x, y: ptr.y, r: 2, max: rand(70, 110), sp: 0.55, a: 0.24 });
+        rings.push({ x: ptr.x, y: ptr.y, r: 2, max: rand(70, 110), sp: 0.55, a: 0.34 });
         lastX = ptr.x; lastY = ptr.y; lastAt = B.clock;
       }
       idle -= dt;
       if (idle <= 0) {
-        rings.push({ x: rand(0, B.w), y: rand(0, B.h), r: 2, max: rand(90, 160), sp: 0.4, a: 0.13 });
+        rings.push({ x: rand(0, B.w), y: rand(0, B.h), r: 2, max: rand(90, 160), sp: 0.4, a: 0.2 });
         idle = rand(3, 6);
       }
       rings.forEach((r) => { r.r += r.sp * 60 * dt; });
@@ -53,8 +58,8 @@
   addEventListener('pointerdown', (e) => {
     if (M.surface().scene !== 'ripples' || !M.motion) return;
     if (e.target.closest('a, button, input, textarea, select, label, summary, canvas, .card, .specimen, mark, .term')) return;
-    rings.push({ x: e.clientX, y: e.clientY, r: 2, max: 220, sp: 1.2, a: 0.3 });
-    rings.push({ x: e.clientX, y: e.clientY, r: 2, max: 150, sp: 0.9, a: 0.22 });
+    rings.push({ x: e.clientX, y: e.clientY, r: 2, max: 220, sp: 1.2, a: 0.4 });
+    rings.push({ x: e.clientX, y: e.clientY, r: 2, max: 150, sp: 0.9, a: 0.3 });
   });
 
   /* ---------- Contours: a quiet topographic map that rises under the cursor ---------- */
@@ -82,6 +87,7 @@
     },
     paint() {
       if (!field) return;
+      if (!M.motion) this.step(); // a still frame still needs its map
       ctx.lineCap = 'round';
       ctx.strokeStyle = palette().ink;
       for (let li = 0; li < 8; li++) {
@@ -169,9 +175,10 @@
       contour: `repeating-radial-gradient(ellipse at 35% 60%, transparent 0 6px, ${p.ink}2e 6px 7px)`,
       wash: `radial-gradient(circle at 25% 30%, ${p.acc}66, transparent 55%), radial-gradient(circle at 80% 80%, ${p.ink}33, transparent 55%)`,
       linen: `repeating-linear-gradient(0deg, ${p.ink}22 0 1px, transparent 1px 4px), repeating-linear-gradient(90deg, ${p.ink}1a 0 1px, transparent 1px 4px)`,
-      grid: `linear-gradient(${p.ink}2a 1px, transparent 1px) 0 0 / 10px 10px, linear-gradient(90deg, ${p.ink}2a 1px, transparent 1px) 0 0 / 10px 10px`,
-    }[sf.id] || '';
-    return `background-color:${p.bg};background-image:${art}`;
+      grid: `linear-gradient(${p.ink}2a 1px, transparent 1px), linear-gradient(90deg, ${p.ink}2a 1px, transparent 1px)`,
+    }[sf.id] || 'none';
+    const size = sf.id === 'grid' ? 'background-size:10px 10px' : sf.id === 'linen' ? 'background-size:auto' : '';
+    return `background-color:${p.bg};background-image:${art};${size}`;
   };
 
   function build() {
@@ -188,6 +195,7 @@
       <header><h3>Background</h3><button class="bg-close" aria-label="Close">×</button></header>
       ${sec('Alive', 'responds to you', 'alive')}
       ${sec('Still', 'nothing moves', 'still')}
+      ${M.settings.motion ? '' : '<p class="bg-note">Motion is off, so the alive backgrounds are held still. <button class="bg-motion">Turn motion on</button></p>'}
       <p class="bg-foot">Tip: press <kbd>B</kbd> anywhere to move through them.</p>`;
   }
   function label() {
@@ -215,6 +223,7 @@
   trigger.addEventListener('click', () => (isOpen ? close() : open()));
   panel.addEventListener('click', (e) => {
     if (e.target.closest('.bg-close')) return close();
+    if (e.target.closest('.bg-motion')) { M.set({ motion: true }); return; }
     const opt = e.target.closest('.bg-opt');
     if (!opt) return;
     M.set({ surface: opt.dataset.id });
@@ -250,9 +259,11 @@
   });
 
   let lastTheme = M.settings.theme;
+  let lastMotion = M.settings.motion;
   M.bus.addEventListener('settings', () => {
-    if (!panel.hidden && lastTheme !== M.settings.theme) { build(); }
+    if (!panel.hidden && (lastTheme !== M.settings.theme || lastMotion !== M.settings.motion)) { build(); }
     lastTheme = M.settings.theme;
+    lastMotion = M.settings.motion;
     label();
   });
   B.refresh(); // pick up the saved surface now that every scene is registered
