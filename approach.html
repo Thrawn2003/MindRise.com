@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/site.css?v=bfe61f5f" />
+  <link rel="stylesheet" href="css/site.css?v=2c49e187" />
 </head>
 <body data-scene="ruled">
   <a class="skip" href="#main">Skip to content</a>
@@ -20,7 +20,7 @@
     <nav class="site-nav" id="siteNav" aria-label="Primary">
       <a href="approach.html">Approach</a>
       <a href="products.html">Products</a>
-      <a href="courses.html">Courses</a>
+      <a href="sites.html">Sites</a>
       <a href="pricing.html">Pricing</a>
       <a href="contact.html">Contact</a>
       <span class="nav-ink" aria-hidden="true"></span>
@@ -107,7 +107,56 @@
           <h2 data-rise>Rest is part of the work</h2>
           <p class="fade">Memory is consolidated away from the desk: in pauses, on walks, and above all in sleep. A good study session ends while some energy is left, and a good tool lets a student stop without guilt.</p>
           <p class="fade">That is why Cadence suggests breaks and never counts streaks, and why none of our products will send a reminder that makes a student feel behind. For educators, it is a reason to spread revision across the term rather than stacking it before an exam.</p>
-          <p class="fade" style="margin-top:2.4em;display:flex;gap:16px;flex-wrap:wrap"><a class="btn solid" data-magnetic href="products.html">Try the tools</a><a class="btn" data-magnetic href="contact.html">Talk to us about your classroom</a></p>
+          <div class="rest fade" id="rest">
+            <span class="kicker">Resources · take five</span>
+            <h3>Rest, on purpose</h3>
+            <div class="rest-lead">A few quiet things to do between sessions. None of them keep score or run a clock.</div>
+            <div class="rest-tabs" role="tablist" aria-label="Rest activities">
+              <button class="chip" role="tab" data-rtab="breathe">Breathe</button>
+              <button class="chip" role="tab" data-rtab="bubbles">Bubbles</button>
+              <button class="chip" role="tab" data-rtab="mandala">Mandala</button>
+              <button class="chip" role="tab" data-rtab="pairs">Pairs</button>
+            </div>
+            <div class="specimen sheen rest-stage">
+              <span class="label">Stress reliever</span>
+              <div data-rpanel="breathe">
+                <div class="breath"><div class="b-ring" id="rbRing" aria-hidden="true"></div></div>
+                <div class="b-read"><span id="rbLabel" aria-live="polite">Ready</span> · breaths so far <b id="rbCount">0</b></div>
+                <div class="rest-controls"><span id="rbPatterns"><button class="chip active" data-p="box">Box 4·4·4·4</button><button class="chip" data-p="slow">Slow 4·7·8</button><button class="chip" data-p="easy">Easy 5·5</button></span><button class="btn solid" id="rbStart" data-silent>Begin</button></div>
+              </div>
+              <div data-rpanel="bubbles" hidden>
+                <div class="rest-note">Press them, or sweep across with the mouse or a finger.</div>
+                <div class="rbubs" id="rbSheet" aria-label="Sheet of bubbles"></div>
+                <div class="rest-controls"><span id="rbBubNote" class="rest-note" aria-live="polite"></span><button class="btn" id="rbRefill">Refill</button></div>
+              </div>
+              <div data-rpanel="mandala" hidden>
+                <div class="rest-note">Draw anywhere. Every line is mirrored around the centre.</div>
+                <div class="canvas-wrap"><canvas id="mdCanvas" width="640" height="340" aria-label="Mandala drawing area. Pointer only."></canvas></div>
+                <div class="rest-controls"><span id="mdSym"><button class="chip" data-n="6">6</button><button class="chip active" data-n="8">8</button><button class="chip" data-n="12">12</button></span><span><button class="chip" id="mdUndo">Undo</button><button class="chip" id="mdClear">Clear</button></span></div>
+              </div>
+              <div data-rpanel="pairs" hidden>
+                <div class="rest-note" id="prNote" aria-live="polite">Turn two cards at a time.</div>
+                <div class="pairs" id="prGrid"></div>
+                <div class="rest-controls"><span></span><button class="btn" id="prShuffle">Shuffle</button></div>
+              </div>
+            </div>
+
+            <h3 style="margin-top:2.6rem">More ways to unwind</h3>
+            <div class="rest-lead">Games and tools from the AAUGS team. Each opens in a new tab.</div>
+            <div class="resource-group">Games</div>
+            <ul class="resource-list">
+              <li><a href="https://uno.aaugs.com" target="_blank" rel="noopener noreferrer"><span class="r-name">UNO</span><span class="r-desc">The classic card game, in your browser.</span><span class="r-tag">Game</span><span class="r-arrow" aria-hidden="true">↗</span></a></li>
+              <li><a href="https://quizcraft.aaugs.com" target="_blank" rel="noopener noreferrer"><span class="r-name">QuizCraft</span><span class="r-desc">A real-time multiplayer quiz game to play with friends.</span><span class="r-tag">Game</span><span class="r-arrow" aria-hidden="true">↗</span></a></li>
+              <li><a href="https://colordle.aaugs.com" target="_blank" rel="noopener noreferrer"><span class="r-name">Colordle</span><span class="r-desc">A daily colour-guessing game.</span><span class="r-tag">Game</span><span class="r-arrow" aria-hidden="true">↗</span></a></li>
+            </ul>
+            <div class="resource-group">Also from the team</div>
+            <ul class="resource-list">
+              <li><a href="https://library.aaugs.com" target="_blank" rel="noopener noreferrer"><span class="r-name">Library Catalog</span><span class="r-desc">A library catalog to browse and search.</span><span class="r-tag">Tool</span><span class="r-arrow" aria-hidden="true">↗</span></a></li>
+              <li><a href="https://modelview.aaugs.com" target="_blank" rel="noopener noreferrer"><span class="r-name">ModelView</span><span class="r-desc">An AI model comparison dashboard with interactive charts for 170+ models.</span><span class="r-tag">Tool</span><span class="r-arrow" aria-hidden="true">↗</span></a></li>
+              <li><a href="https://builder.sites.aaugs.com" target="_blank" rel="noopener noreferrer"><span class="r-name">AAUGS Builder</span><span class="r-desc">A drag-and-drop website builder with AI content generation and one-click publishing.</span><span class="r-tag">Tool</span><span class="r-arrow" aria-hidden="true">↗</span></a></li>
+            </ul>
+            <div class="rest-note" style="margin-top:18px"><a class="link-arrow" href="https://aaugs.com/portfolio" target="_blank" rel="noopener noreferrer">See the full AAUGS portfolio <span aria-hidden="true">↗</span></a> <span style="margin-left:18px"><a class="link-arrow" href="sites.html">All our sites <span aria-hidden="true">→</span></a></span></div>
+          </div>
         </section>
       </div>
     </div>
@@ -121,7 +170,7 @@
       <div class="foot-grid">
         <p>Learning software for students, and for the educators who teach them.</p>
         <div><h4>Products</h4><ul><li><a href="products.html#recall">Recall</a></li><li><a href="products.html#plot">Plot</a></li><li><a href="products.html#cadence">Cadence</a></li></ul></div>
-        <div><h4>Who it is for</h4><ul><li><a href="pricing.html#student">Students</a></li><li><a href="pricing.html#educator">Educators</a></li><li><a href="pricing.html#school">Schools &amp; districts</a></li><li><a href="approach.html">Our approach</a></li></ul></div>
+        <div><h4>Who it is for</h4><ul><li><a href="sites.html">Students</a></li><li><a href="sites.html">Educators</a></li><li><a href="pricing.html#custom">Custom projects</a></li><li><a href="approach.html">Our approach</a></li></ul></div>
         <div><h4>Reading</h4><ul><li><button id="setSurface">Background: Window light</button></li><li><button id="setTheme">Reading: paper</button></li><li><button id="setMotion">Motion: on</button></li><li><button id="setSound">Sound: off</button></li></ul></div>
       </div>
       <div class="legal"><span><span id="greet"></span> · © <span id="year"></span> Mindrise</span><span>Set in Newsreader &amp; Inter</span></div>
@@ -132,5 +181,6 @@
   <script src="js/ambient.js?v=5a221ed5"></script>
   <script src="js/backgrounds.js?v=1eb49b6c"></script>
   <script src="js/reading.js?v=fd6e73bf"></script>
+  <script src="js/rest.js?v=c6f84006"></script>
 </body>
 </html>
