@@ -137,31 +137,49 @@
     { tone: 'w1', x: 0.1, y: 0.88, r: 0.36, seed: 27, depth: 0.5 },
     { tone: 'w2', x: 0.92, y: 0.72, r: 0.38, seed: 35, depth: 0.9 },
   ];
+  // The wash is soft by nature, so it is painted small and scaled up: far cheaper and just as smooth.
+  const lowRes = document.createElement('canvas');
+  const lowCtx = lowRes.getContext('2d');
   M.scenes.wash = {
-    init() {},
+    init() {
+      lowRes.width = Math.max(2, Math.ceil(B.w / 6));
+      lowRes.height = Math.max(2, Math.ceil(B.h / 6));
+    },
     paint() {
       const c = palette();
       const dark = night();
+      const W = lowRes.width, H = lowRes.height, sc6 = W / Math.max(B.w, 1);
       const mx = ptr.x === OFF ? 0 : ptr.x / B.w - 0.5;
       const my = ptr.y === OFF ? 0 : ptr.y / B.h - 0.5;
       const sc = scrollY * 0.00025;
-      pools.forEach((p, i) => {
-        const x = B.w * (p.x + 0.09 * (noise(p.seed, B.clock * 0.03, sc) - 0.5) * 2) + mx * 70 * p.depth;
-        const y = B.h * (p.y + 0.09 * (noise(p.seed + 50, B.clock * 0.03, sc) - 0.5) * 2) + my * 70 * p.depth;
-        const rad = Math.max(B.w, B.h) * p.r;
-        const g = ctx.createRadialGradient(x, y, 0, x, y, rad);
+      lowCtx.clearRect(0, 0, W, H);
+      pools.forEach((p) => {
+        const x = (B.w * (p.x + 0.09 * (noise(p.seed, B.clock * 0.03, sc) - 0.5) * 2) + mx * 70 * p.depth) * sc6;
+        const y = (B.h * (p.y + 0.09 * (noise(p.seed + 50, B.clock * 0.03, sc) - 0.5) * 2) + my * 70 * p.depth) * sc6;
+        const rad = Math.max(W, H) * p.r * (B.w >= B.h ? 1 : 0.9);
+        const g = lowCtx.createRadialGradient(x, y, 0, x, y, rad);
         g.addColorStop(0, rgba(c[p.tone], dark ? 0.42 : 0.5));
         g.addColorStop(1, rgba(c[p.tone], 0));
-        ctx.fillStyle = g;
-        ctx.fillRect(0, 0, B.w, B.h);
+        lowCtx.fillStyle = g;
+        lowCtx.fillRect(Math.max(0, x - rad), Math.max(0, y - rad), rad * 2, rad * 2);
       });
+      ctx.imageSmoothingEnabled = true;
+      ctx.drawImage(lowRes, 0, 0, B.w, B.h);
     },
   };
 
   /* =========================================================
      The picker
      ========================================================= */
-  const trigger = $('#setSurface');
+  const footerTrigger = $('#setSurface');
+  const pill = document.createElement('button');
+  pill.id = 'bgPill';
+  pill.type = 'button';
+  pill.className = 'bg-pill';
+  pill.innerHTML = '<i class="pill-swatch" aria-hidden="true"></i><span class="pill-text"><small>Background</small><b id="pillName"></b></span><span class="pill-chev" aria-hidden="true">↑</span>';
+  document.body.appendChild(pill);
+  const trigger = pill; // focus returns here; the footer link behaves the same
+  const triggers = [pill, footerTrigger];
   const panel = document.createElement('section');
   panel.id = 'bgPanel';
   panel.setAttribute('role', 'dialog');
@@ -180,8 +198,14 @@
       wash: `radial-gradient(circle at 25% 30%, ${p.w1}aa, transparent 55%), radial-gradient(circle at 80% 75%, ${p.w3}99, transparent 55%)`,
       linen: `repeating-linear-gradient(0deg, ${p.ink}22 0 1px, transparent 1px 4px), repeating-linear-gradient(90deg, ${p.ink}1a 0 1px, transparent 1px 4px)`,
       grid: `linear-gradient(${p.ink}2a 1px, transparent 1px), linear-gradient(90deg, ${p.ink}2a 1px, transparent 1px)`,
+      pendulum: `radial-gradient(circle at 18% 70%, ${p.acc} 0 3px, transparent 3.5px), radial-gradient(circle at 36% 58%, ${p.acc} 0 3px, transparent 3.5px), radial-gradient(circle at 54% 76%, ${p.acc} 0 3px, transparent 3.5px), radial-gradient(circle at 72% 62%, ${p.acc} 0 3px, transparent 3.5px), repeating-linear-gradient(90deg, transparent 0 17%, ${p.ink}44 17% calc(17% + 1px))`,
+      murmur: `repeating-linear-gradient(118deg, transparent 0 7px, ${p.ink}66 7px 9px, transparent 9px 17px), radial-gradient(circle at 60% 40%, ${p.acc}55, transparent 50%)`,
+      life: `repeating-conic-gradient(${p.acc}77 0 25%, transparent 0 50%)`,
+      harmonograph: `repeating-conic-gradient(from 10deg at 50% 50%, ${p.ink}33 0 4deg, transparent 4deg 15deg), repeating-radial-gradient(circle at 50% 50%, transparent 0 5px, ${p.acc}55 5px 6px)`,
+      tank: `repeating-radial-gradient(circle at 30% 45%, transparent 0 5px, ${p.acc}77 5px 6px), repeating-radial-gradient(circle at 72% 60%, transparent 0 5px, ${p.ink}55 5px 6px)`,
+      chalk: `radial-gradient(1.6px 1.6px at 18% 28%, ${p.ink}cc, transparent), radial-gradient(1.6px 1.6px at 42% 62%, ${p.ink}aa, transparent), radial-gradient(1.6px 1.6px at 70% 36%, ${p.ink}cc, transparent), radial-gradient(1.6px 1.6px at 82% 78%, ${p.ink}99, transparent), radial-gradient(1.6px 1.6px at 30% 84%, ${p.ink}88, transparent)`,
     }[key] || 'none';
-    const size = sf.id === 'grid' ? 'background-size:10px 10px' : '';
+    const size = sf.id === 'grid' ? 'background-size:10px 10px' : sf.id === 'life' ? 'background-size:12px 12px' : '';
     return `background-color:${p.bg};background-image:${art};${size}`;
   };
 
@@ -203,7 +227,11 @@
       <p class="bg-foot">Tip: press <kbd>B</kbd> anywhere to move through them.</p>`;
   }
   function label() {
-    trigger.textContent = `Background: ${M.surface().label}`;
+    const sf = M.surface();
+    footerTrigger.textContent = `Background: ${sf.label}`;
+    $('#pillName').textContent = sf.label;
+    pill.dataset.mode = sf.scene ? 'alive' : 'still';
+    pill.querySelector('.pill-swatch').setAttribute('style', preview(sf));
     panel.querySelectorAll('.bg-opt').forEach((o) => o.setAttribute('aria-checked', String(o.dataset.id === M.settings.surface)));
   }
   let isOpen = false;
@@ -212,19 +240,21 @@
     build();
     panel.hidden = false;
     requestAnimationFrame(() => isOpen && panel.classList.add('on'));
-    trigger.setAttribute('aria-expanded', 'true');
+    triggers.forEach((t) => t.setAttribute('aria-expanded', 'true'));
     const sel = panel.querySelector('[aria-checked="true"]');
     if (sel) sel.focus({ preventScroll: true });
   }
   function close() {
     isOpen = false;
     panel.classList.remove('on');
-    trigger.setAttribute('aria-expanded', 'false');
+    triggers.forEach((t) => t.setAttribute('aria-expanded', 'false'));
     setTimeout(() => { if (!isOpen) panel.hidden = true; }, 350);
   }
-  trigger.setAttribute('aria-haspopup', 'dialog');
-  trigger.setAttribute('aria-expanded', 'false');
-  trigger.addEventListener('click', () => (isOpen ? close() : open()));
+  triggers.forEach((t) => {
+    t.setAttribute('aria-haspopup', 'dialog');
+    t.setAttribute('aria-expanded', 'false');
+    t.addEventListener('click', () => (isOpen ? close() : open()));
+  });
   panel.addEventListener('click', (e) => {
     if (e.target.closest('.bg-close')) return close();
     if (e.target.closest('.bg-motion')) { M.set({ motion: true }); return; }
@@ -241,7 +271,7 @@
     else if (i >= 0 && (e.key === 'ArrowLeft' || e.key === 'ArrowUp')) { e.preventDefault(); opts[(i - 1 + opts.length) % opts.length].focus(); }
   });
   document.addEventListener('pointerdown', (e) => {
-    if (!panel.hidden && !e.target.closest('#bgPanel, #setSurface')) close();
+    if (!panel.hidden && !e.target.closest('#bgPanel, #setSurface, #bgPill')) close();
   });
 
   /* ----- B cycles through the backgrounds, with a quiet caption ----- */

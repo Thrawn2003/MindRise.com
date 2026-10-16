@@ -1,4 +1,4 @@
-/* Pricing: the questions list opens smoothly. */
+/* Questions lists open smoothly. */
 (() => {
   const M = window.Mindrise;
   const { $, $$ } = M;

@@ -49,6 +49,12 @@
     { id: 'nightmap', label: 'Night map', group: 'alive', scene: 'contour', dark: true, vars: P('#0f1f18', '#172a20', '#dcebd8', '#a9c2ad', '#80a08a', '#e8a36e', '#d6c070', 'rgba(220,235,216,0.2)') },
     { id: 'wash', label: 'Colour wash', group: 'alive', scene: 'wash', dark: false, vars: P('#f7e8df', '#fcf1ea', '#2d1e1b', '#64473f', '#74574e', '#b0402a', '#b4781f', 'rgba(45,30,27,0.2)', { '--w1': '#f08a6a', '--w2': '#f2c65a', '--w3': '#8da6e6' }) },
     { id: 'aurora', label: 'Aurora', group: 'alive', scene: 'wash', dark: true, vars: P('#0c1222', '#141b30', '#e6ebf7', '#b2bbd5', '#8791b0', '#f2a58a', '#e6c882', 'rgba(230,235,247,0.2)', { '--w1': '#2fd0a4', '--w2': '#7566f0', '--w3': '#f0809f' }) },
+    { id: 'pendulum', label: 'Pendulum wave', group: 'alive', scene: 'pendulum', dark: false, vars: P('#e0e2d2', '#eef0e2', '#22261b', '#434a39', '#525b45', '#933c2b', '#876a2c', 'rgba(34,38,27,0.2)') },
+    { id: 'murmur', label: 'Murmuration', group: 'alive', scene: 'murmur', dark: false, vars: P('#c2d0e4', '#d8e3f1', '#0f1f30', '#2a3e54', '#374f68', '#7b382d', '#86682a', 'rgba(15,31,48,0.22)') },
+    { id: 'life', label: 'Game of Life', group: 'alive', scene: 'life', dark: false, vars: P('#e2efbd', '#eef6d2', '#26340f', '#415221', '#50642c', '#36691b', '#7a6a28', 'rgba(38,52,15,0.2)') },
+    { id: 'spiro', label: 'Harmonograph', group: 'alive', scene: 'harmonograph', dark: false, vars: P('#ecd6c2', '#f6e9dc', '#2d1e15', '#543e32', '#674e41', '#8f3721', '#a0702a', 'rgba(45,30,21,0.2)') },
+    { id: 'tank', label: 'Ripple tank', group: 'alive', scene: 'tank', dark: true, vars: P('#17132e', '#201b3d', '#e7e4fb', '#bfbbe4', '#9792c4', '#7ee6d6', '#f0c97a', 'rgba(231,228,251,0.2)') },
+    { id: 'chalk', label: 'Chalkboard', group: 'alive', scene: 'chalk', dark: true, vars: P('#1a3b36', '#22463f', '#f0efe6', '#c5d3c6', '#9db3a2', '#f2c46d', '#9fd3b0', 'rgba(240,239,230,0.22)') },
     // ---- still: nothing moves ----
     { id: 'paper', label: 'Plain paper', group: 'still', neutral: true },
     { id: 'linen', label: 'Linen', group: 'still', texture: 'linen', dark: false, vars: P('#e6dccb', '#f0e9da', '#251f16', '#54483a', '#605446', '#7d2f2f', '#85652a', 'rgba(37,31,22,0.2)', { '--tex': 'rgba(70,50,25,0.13)' }) },

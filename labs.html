@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="paper">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Labs — MindRise</title>
+  <meta name="description" content="Six small experiments from science and maths as interactive backgrounds: pendulum wave, murmuration, Game of Life, harmonograph, ripple tank and a formula chalkboard." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/site.css?v=767ca50e" />
+</head>
+<body data-scene="dots">
+  <a class="skip" href="#main">Skip to content</a>
+  <div id="progress" aria-hidden="true"></div>
+  <canvas id="field" aria-hidden="true"></canvas>
+
+  <header class="site-header" id="header">
+    <a class="wordmark" href="index.html" aria-label="Mindrise, home">Mindrise</a>
+    <nav class="site-nav" id="siteNav" aria-label="Primary">
+      <a href="about.html">About</a>
+      <a href="approach.html">Approach</a>
+      <a href="labs.html">Labs</a>
+      <a href="sites.html">Sites</a>
+      <a href="services.html">Services</a>
+      <a href="contact.html">Contact</a>
+      <span class="nav-ink" aria-hidden="true"></span>
+    </nav>
+    <button class="icon-btn" id="themeBtn" aria-label="Switch between paper and night reading">◐</button>
+    <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="siteNav">Menu</button>
+  </header>
+
+  <main id="main">
+
+    <section class="page-head wrap">
+      <p class="kicker fade">Labs</p>
+      <h1 data-rise>Small experiments you can <em>play</em> with</h1>
+      <p class="standfirst fade">Six ideas from science and maths, each one a living background for this whole site. Press a button and the page itself becomes the experiment.</p>
+    </section>
+
+    <section class="wrap" style="padding-bottom:40px">
+      <ol class="labs">
+        <li class="lab fade" data-surface="pendulum">
+          <span class="n">01.</span>
+          <div class="lab-main"><h3>Pendulum wave</h3><span class="lab-tag">Physics</span><div class="lab-text">Eighteen pendulums of slightly different lengths start together. Each swings at a slightly different rate, so they drift in and out of step, tracing travelling waves, then apparent chaos, then snap back into line. Many simple rhythms add up to a complex pattern.</div><div class="lab-try">Move the cursor near a bob to give it extra swing.</div></div>
+          <button class="btn lab-btn" data-surface="pendulum" aria-pressed="false"><span>Use as my background</span></button>
+        </li>
+        <li class="lab fade" data-surface="murmur">
+          <span class="n">02.</span>
+          <div class="lab-main"><h3>Murmuration</h3><span class="lab-tag">Complexity</span><div class="lab-text">Starling flocks turn as one with no leader. In 1986 Craig Reynolds showed that three simple rules are enough to imitate it: steer away from crowding, match the heading of your neighbours, and move toward their centre.</div><div class="lab-try">The flock is curious about your cursor.</div></div>
+          <button class="btn lab-btn" data-surface="murmur" aria-pressed="false"><span>Use as my background</span></button>
+        </li>
+        <li class="lab fade" data-surface="life">
+          <span class="n">03.</span>
+          <div class="lab-main"><h3>Game of Life</h3><span class="lab-tag">Computation</span><div class="lab-text">John Conway’s 1970 “game” has two rules. A live cell with two or three live neighbours survives, and a dead cell with exactly three comes alive. From that come gliders, oscillators and endless surprises: a classic first look at emergence.</div><div class="lab-try">Move across the board to bring cells to life. Click to drop a glider or a restless little pattern.</div></div>
+          <button class="btn lab-btn" data-surface="life" aria-pressed="false"><span>Use as my background</span></button>
+        </li>
+        <li class="lab fade" data-surface="spiro">
+          <span class="n">04.</span>
+          <div class="lab-main"><h3>Harmonograph</h3><span class="lab-tag">Mathematics</span><div class="lab-text">A harmonograph draws with pendulums. Two or more fading oscillations at slightly different frequencies add up to loops and rosettes. Here the frequencies drift slowly, so the drawing keeps changing shape.</div><div class="lab-try">Move left and right, up and down, to change the frequency ratios.</div></div>
+          <button class="btn lab-btn" data-surface="spiro" aria-pressed="false"><span>Use as my background</span></button>
+        </li>
+        <li class="lab fade" data-surface="tank">
+          <span class="n">05.</span>
+          <div class="lab-main"><h3>Ripple tank</h3><span class="lab-tag">Waves</span><div class="lab-text">Waves from several sources overlap. Where crest meets crest they reinforce, and where crest meets trough they cancel. This interference is behind noise-cancelling headphones and the colours of a soap bubble.</div><div class="lab-try">Your cursor is the third wave source.</div></div>
+          <button class="btn lab-btn" data-surface="tank" aria-pressed="false"><span>Use as my background</span></button>
+        </li>
+        <li class="lab fade" data-surface="chalk">
+          <span class="n">06.</span>
+          <div class="lab-main"><h3>Chalkboard</h3><span class="lab-tag">Formulas</span><div class="lab-text">Equations drift down the board like chalk dust. Each one is a real formula from physics, maths or chemistry, from Einstein’s E = mc² to the quadratic formula and the chemical formula for glucose.</div><div class="lab-try">Sweep through the formulas to stir them. Click to add another.</div></div>
+          <button class="btn lab-btn" data-surface="chalk" aria-pressed="false"><span>Use as my background</span></button>
+        </li>
+      </ol>
+      <p class="fade" style="margin-top:34px;color:var(--soft);max-width:60ch">These and the other backgrounds live behind the <b>Background</b> button at the bottom right of every page. Press <kbd>B</kbd> to move through them.</p>
+    </section>
+
+    <section class="next wrap"><a class="next-link" href="sites.html"><span class="kicker">Continue</span><span class="next-title">Sites</span><span class="arr" aria-hidden="true">→</span></a></section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div id="bigmark" data-text="Mindrise" aria-label="Mindrise">Mindrise</div>
+      <div class="foot-grid">
+        <p>MindRise is the parent company of AAUGS Corp., the Auroris Advanced Utility and General Software Corporation. Software that makes a difference.</p>
+        <div><h4>Pages</h4><ul><li><a href="about.html">About</a></li><li><a href="approach.html">Approach</a></li><li><a href="labs.html">Labs</a></li><li><a href="sites.html">Sites</a></li><li><a href="services.html">Services</a></li></ul></div>
+        <div><h4>Contact</h4><ul><li><a href="mailto:contact@aaugs.com">contact@aaugs.com</a></li><li><a href="contact.html">Send a message →</a></li><li><a href="https://aaugs.com" target="_blank" rel="noopener noreferrer">aaugs.com ↗</a></li></ul></div>
+        <div><h4>Reading</h4><ul><li><button id="setSurface">Background: Window light</button></li><li><button id="setTheme">Reading: paper</button></li><li><button id="setMotion">Motion: on</button></li><li><button id="setSound">Sound: off</button></li></ul></div>
+      </div>
+      <div class="legal"><span><span id="greet"></span> · © <span id="year"></span> MindRise</span><span>MindRise · AAUGS Corp.</span></div>
+    </div>
+  </footer>
+
+  <script src="js/core.js?v=1d250215"></script>
+  <script src="js/ambient.js?v=5a221ed5"></script>
+  <script src="js/scenes.js?v=271aca66"></script>
+  <script src="js/backgrounds.js?v=a12cbe80"></script>
+  <script src="js/labs.js?v=9b0a0c36"></script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 (() => {
   const M = window.Mindrise;
   const { $, $$, clamp, css, rand } = M;
-  const root = $('#rest');
+  const root = $('#restkit');
   if (!root) return;
   const TAU = Math.PI * 2;
   const shuffle = (a) => { const r = [...a]; for (let i = r.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [r[i], r[j]] = [r[j], r[i]]; } return r; };

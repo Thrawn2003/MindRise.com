@@ -574,3 +574,69 @@ html { background: var(--bg); }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .r-name { white-space: normal; }
 .resource-list a { grid-template-columns: minmax(0, 11rem) minmax(0, 1fr) auto auto; }
+
+/* the floating Background button */
+.bg-pill { position: fixed; right: var(--gutter); bottom: 22px; z-index: 171; display: flex; align-items: center; gap: 13px; padding: 7px 20px 7px 8px; border-radius: 999px; border: 1px solid var(--rule); background: color-mix(in srgb, var(--paper) 84%, transparent); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); box-shadow: 0 14px 36px rgba(0, 0, 0, 0.16); color: var(--ink); cursor: pointer; font-family: var(--sans); transition: transform 0.55s var(--ease), box-shadow 0.4s, border-color 0.3s; }
+.bg-pill:hover, .bg-pill[aria-expanded="true"] { transform: translateY(-4px); box-shadow: 0 22px 46px rgba(0, 0, 0, 0.22); border-color: var(--accent); }
+.bg-pill:active { transform: translateY(-1px) scale(0.98); }
+.pill-swatch { position: relative; flex: none; display: block; width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--rule); transition: transform 0.6s var(--ease); }
+.pill-swatch::before { content: ""; position: absolute; inset: -6px; border-radius: 50%; background: conic-gradient(from 0deg, var(--accent), transparent 38%, var(--brass) 55%, transparent 82%, var(--accent)); -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 1.5px)); mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 1.5px)); animation: pillSpin 7s linear infinite; }
+.bg-pill[data-mode="still"] .pill-swatch::before { background: var(--rule); animation: none; }
+.bg-pill:hover .pill-swatch { transform: rotate(40deg) scale(1.06); }
+.bg-pill:hover .pill-swatch::before { animation-duration: 2.4s; }
+@keyframes pillSpin { to { transform: rotate(360deg); } }
+.pill-text { display: grid; text-align: left; line-height: 1.15; }
+.pill-text small { font: 500 0.54rem var(--sans); letter-spacing: 0.22em; text-transform: uppercase; color: var(--mute); }
+.pill-text b { font: italic 400 1.08rem var(--serif); color: var(--ink); white-space: nowrap; }
+.pill-chev { font-size: 0.95rem; color: var(--accent); transition: transform 0.5s var(--ease); }
+.bg-pill[aria-expanded="true"] .pill-chev { transform: rotate(180deg); }
+[data-motion="off"] .pill-swatch::before { animation: none; }
+#bgPanel { bottom: 92px; }
+.site-footer { padding-bottom: 96px; }
+@media (max-width: 560px) { .pill-text b { display: none; } .bg-pill { padding-right: 16px; bottom: 16px; } #bgPanel { bottom: 84px; } }
+
+/* =====================================================================
+   About, Labs and Services
+   ===================================================================== */
+.timeline { list-style: none; border-top: 1px solid var(--rule); }
+.tl-row { display: grid; grid-template-columns: 11rem minmax(0, 1fr); gap: 2rem; padding: 1.7rem 0; border-bottom: 1px solid var(--rule); }
+.tl-year { font: 500 0.72rem var(--sans); letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); padding-top: 0.45rem; }
+.tl-body { color: var(--soft); max-width: 60ch; }
+.tl-body b { display: block; margin-bottom: 4px; font-size: clamp(1.4rem, 2.4vw, 1.9rem); font-weight: 330; letter-spacing: -0.01em; color: var(--ink); }
+.team { list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--rule); }
+.team li { padding: 1.5rem 1rem 1.5rem 0; border-bottom: 1px solid var(--rule); }
+.tm-name { display: block; font-size: clamp(1.3rem, 2.2vw, 1.7rem); font-weight: 330; letter-spacing: -0.01em; }
+.tm-role { display: block; margin-top: 4px; font: 500 0.64rem var(--sans); letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); }
+.values { grid-template-columns: repeat(2, 1fr); }
+
+.labs { list-style: none; border-top: 1px solid var(--rule); counter-reset: lab; }
+.lab { display: grid; grid-template-columns: 3.4rem minmax(0, 1fr) auto; gap: 1.6rem; align-items: start; padding: 2.2rem 0; border-bottom: 1px solid var(--rule); }
+.lab .n { font: 500 0.72rem var(--sans); letter-spacing: 0.18em; color: var(--accent); padding-top: 0.9rem; }
+.lab h3 { display: inline; font-size: clamp(1.9rem, 3.6vw, 2.8rem); font-weight: 330; letter-spacing: -0.02em; }
+.lab-tag { margin-left: 14px; font: 500 0.62rem var(--sans); letter-spacing: 0.2em; text-transform: uppercase; color: var(--mute); }
+.lab-text { margin-top: 10px; color: var(--soft); max-width: 62ch; }
+.lab-try { margin-top: 10px; font-style: italic; color: var(--mute); font-size: 0.98rem; }
+.lab-try::before { content: "Try: "; font: 500 0.62rem var(--sans); font-style: normal; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); }
+.lab-btn { align-self: center; white-space: nowrap; }
+.lab-btn.on { background: var(--ink); color: var(--bg); }
+.lab-btn.on::before { background: var(--accent); }
+
+.svc-list { list-style: none; border-top: 1px solid var(--rule); }
+.svc { display: grid; grid-template-columns: 3.4rem minmax(0, 1.3fr) minmax(0, 1fr); gap: 1.8rem; padding: 2.2rem 0; border-bottom: 1px solid var(--rule); }
+.svc .n { font: 500 0.72rem var(--sans); letter-spacing: 0.18em; color: var(--accent); padding-top: 0.8rem; }
+.svc h3 { font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 330; letter-spacing: -0.015em; margin-bottom: 8px; }
+.svc-d { display: block; color: var(--soft); max-width: 48ch; }
+.svc-items { list-style: none; font-size: 0.98rem; color: var(--soft); }
+.svc-items li { padding: 8px 0; border-top: 1px solid var(--rule); display: flex; gap: 12px; }
+.svc-items li::before { content: "—"; color: var(--accent); }
+
+@media (max-width: 960px) {
+  .tl-row { grid-template-columns: 1fr; gap: 6px; }
+  .team { grid-template-columns: 1fr 1fr; }
+  .lab { grid-template-columns: 2.4rem minmax(0, 1fr); }
+  .lab-btn { grid-column: 2; justify-self: start; }
+  .svc { grid-template-columns: 2.4rem minmax(0, 1fr); }
+  .svc-items { grid-column: 2; }
+  .values { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) { .team { grid-template-columns: 1fr; } }
