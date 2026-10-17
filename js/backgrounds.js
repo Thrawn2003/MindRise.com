@@ -1,5 +1,5 @@
-/* Backgrounds: three more quiet scenes (still water, contours, colour wash) and the picker in the footer.
-   Still surfaces (paper, linen, graph paper and the solid colours) are handled by core.js and css/site.css. */
+/* Backgrounds: three more quiet scenes (still water, contours) and the picker in the footer.
+   Still surfaces (paper, graph paper and the solid colours) are handled by core.js and css/site.css. */
 (() => {
   const M = window.Mindrise;
   if (!M || !M.bg || !M.SURFACES || !M.scenes || !document.querySelector('#setSurface')) return; // mismatched cached files: stay out of the way
@@ -15,9 +15,6 @@
     if (key !== colorKey) {
       colorKey = key;
       colors = { ink: css('--ink'), accent: css('--accent'), brass: css('--brass'), soft: css('--soft') };
-      colors.w1 = css('--w1') || colors.accent;
-      colors.w2 = css('--w2') || colors.brass;
-      colors.w3 = css('--w3') || colors.soft;
     }
     return colors;
   };
@@ -129,45 +126,6 @@
     },
   };
 
-  /* ---------- Colour wash: large soft pools of colour that drift and lean toward you ---------- */
-  const pools = [
-    { tone: 'w1', x: 0.18, y: 0.25, r: 0.5, seed: 3, depth: 1 },
-    { tone: 'w2', x: 0.82, y: 0.2, r: 0.44, seed: 11, depth: 0.7 },
-    { tone: 'w3', x: 0.6, y: 0.78, r: 0.55, seed: 19, depth: 1.2 },
-    { tone: 'w1', x: 0.1, y: 0.88, r: 0.36, seed: 27, depth: 0.5 },
-    { tone: 'w2', x: 0.92, y: 0.72, r: 0.38, seed: 35, depth: 0.9 },
-  ];
-  // The wash is soft by nature, so it is painted small and scaled up: far cheaper and just as smooth.
-  const lowRes = document.createElement('canvas');
-  const lowCtx = lowRes.getContext('2d');
-  M.scenes.wash = {
-    init() {
-      lowRes.width = Math.max(2, Math.ceil(B.w / 6));
-      lowRes.height = Math.max(2, Math.ceil(B.h / 6));
-    },
-    paint() {
-      const c = palette();
-      const dark = night();
-      const W = lowRes.width, H = lowRes.height, sc6 = W / Math.max(B.w, 1);
-      const mx = ptr.x === OFF ? 0 : ptr.x / B.w - 0.5;
-      const my = ptr.y === OFF ? 0 : ptr.y / B.h - 0.5;
-      const sc = scrollY * 0.00025;
-      lowCtx.clearRect(0, 0, W, H);
-      pools.forEach((p) => {
-        const x = (B.w * (p.x + 0.09 * (noise(p.seed, B.clock * 0.03, sc) - 0.5) * 2) + mx * 70 * p.depth) * sc6;
-        const y = (B.h * (p.y + 0.09 * (noise(p.seed + 50, B.clock * 0.03, sc) - 0.5) * 2) + my * 70 * p.depth) * sc6;
-        const rad = Math.max(W, H) * p.r * (B.w >= B.h ? 1 : 0.9);
-        const g = lowCtx.createRadialGradient(x, y, 0, x, y, rad);
-        g.addColorStop(0, rgba(c[p.tone], dark ? 0.42 : 0.5));
-        g.addColorStop(1, rgba(c[p.tone], 0));
-        lowCtx.fillStyle = g;
-        lowCtx.fillRect(Math.max(0, x - rad), Math.max(0, y - rad), rad * 2, rad * 2);
-      });
-      ctx.imageSmoothingEnabled = true;
-      ctx.drawImage(lowRes, 0, 0, B.w, B.h);
-    },
-  };
-
   /* =========================================================
      The picker
      ========================================================= */
@@ -189,21 +147,17 @@
 
   const NEUTRAL = { paper: { bg: '#f3eee4', ink: '#1f1c18', acc: '#7d2f2f' }, night: { bg: '#15130f', ink: '#ece4d4', acc: '#dc8c76' } };
   const preview = (sf) => {
-    const p = sf.neutral ? { ...NEUTRAL[M.settings.theme], w1: NEUTRAL[M.settings.theme].acc, w3: NEUTRAL[M.settings.theme].ink } : { bg: sf.vars['--bg'], ink: sf.vars['--ink'], acc: sf.vars['--accent'], w1: sf.vars['--w1'] || sf.vars['--accent'], w3: sf.vars['--w3'] || sf.vars['--ink'] };
+    const p = sf.neutral ? { ...NEUTRAL[M.settings.theme] } : { bg: sf.vars['--bg'], ink: sf.vars['--ink'], acc: sf.vars['--accent'] };
     const key = sf.texture || (sf.scene === 'dust' ? 'window' : sf.scene) || '';
     const art = {
       window: `radial-gradient(circle at 70% 20%, ${p.acc}33, transparent 45%), radial-gradient(2px 2px at 30% 60%, ${p.ink}88, transparent), radial-gradient(1.5px 1.5px at 55% 40%, ${p.ink}77, transparent), radial-gradient(2px 2px at 78% 70%, ${p.ink}66, transparent)`,
       ripples: `repeating-radial-gradient(circle at 40% 55%, transparent 0 7px, ${p.ink}33 7px 8px)`,
       contour: `repeating-radial-gradient(ellipse at 35% 60%, transparent 0 6px, ${p.ink}2e 6px 7px)`,
-      wash: `radial-gradient(circle at 25% 30%, ${p.w1}aa, transparent 55%), radial-gradient(circle at 80% 75%, ${p.w3}99, transparent 55%)`,
-      linen: `repeating-linear-gradient(0deg, ${p.ink}22 0 1px, transparent 1px 4px), repeating-linear-gradient(90deg, ${p.ink}1a 0 1px, transparent 1px 4px)`,
       grid: `linear-gradient(${p.ink}2a 1px, transparent 1px), linear-gradient(90deg, ${p.ink}2a 1px, transparent 1px)`,
-      pendulum: `radial-gradient(circle at 18% 70%, ${p.acc} 0 3px, transparent 3.5px), radial-gradient(circle at 36% 58%, ${p.acc} 0 3px, transparent 3.5px), radial-gradient(circle at 54% 76%, ${p.acc} 0 3px, transparent 3.5px), radial-gradient(circle at 72% 62%, ${p.acc} 0 3px, transparent 3.5px), repeating-linear-gradient(90deg, transparent 0 17%, ${p.ink}44 17% calc(17% + 1px))`,
       murmur: `repeating-linear-gradient(118deg, transparent 0 7px, ${p.ink}66 7px 9px, transparent 9px 17px), radial-gradient(circle at 60% 40%, ${p.acc}55, transparent 50%)`,
       life: `repeating-conic-gradient(${p.acc}77 0 25%, transparent 0 50%)`,
       harmonograph: `repeating-conic-gradient(from 10deg at 50% 50%, ${p.ink}33 0 4deg, transparent 4deg 15deg), repeating-radial-gradient(circle at 50% 50%, transparent 0 5px, ${p.acc}55 5px 6px)`,
       tank: `repeating-radial-gradient(circle at 30% 45%, transparent 0 5px, ${p.acc}77 5px 6px), repeating-radial-gradient(circle at 72% 60%, transparent 0 5px, ${p.ink}55 5px 6px)`,
-      chalk: `radial-gradient(1.6px 1.6px at 18% 28%, ${p.ink}cc, transparent), radial-gradient(1.6px 1.6px at 42% 62%, ${p.ink}aa, transparent), radial-gradient(1.6px 1.6px at 70% 36%, ${p.ink}cc, transparent), radial-gradient(1.6px 1.6px at 82% 78%, ${p.ink}99, transparent), radial-gradient(1.6px 1.6px at 30% 84%, ${p.ink}88, transparent)`,
     }[key] || 'none';
     const size = sf.id === 'grid' ? 'background-size:10px 10px' : sf.id === 'life' ? 'background-size:12px 12px' : '';
     return `background-color:${p.bg};background-image:${art};${size}`;

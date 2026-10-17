@@ -47,29 +47,21 @@
     { id: 'deep', label: 'Deep water', group: 'alive', scene: 'ripples', dark: true, vars: P('#0d2830', '#133541', '#e3f1f4', '#b0cbd2', '#86a9b3', '#f0a98c', '#e0c27a', 'rgba(227,241,244,0.2)') },
     { id: 'contour', label: 'Contours', group: 'alive', scene: 'contour', dark: false, vars: P('#e8dcbd', '#f3ead2', '#3a2b14', '#615236', '#62542e', '#8a3820', '#7f6320', 'rgba(58,43,20,0.22)') },
     { id: 'nightmap', label: 'Night map', group: 'alive', scene: 'contour', dark: true, vars: P('#0f1f18', '#172a20', '#dcebd8', '#a9c2ad', '#80a08a', '#e8a36e', '#d6c070', 'rgba(220,235,216,0.2)') },
-    { id: 'wash', label: 'Colour wash', group: 'alive', scene: 'wash', dark: false, vars: P('#f7e8df', '#fcf1ea', '#2d1e1b', '#64473f', '#74574e', '#b0402a', '#b4781f', 'rgba(45,30,27,0.2)', { '--w1': '#f08a6a', '--w2': '#f2c65a', '--w3': '#8da6e6' }) },
-    { id: 'aurora', label: 'Aurora', group: 'alive', scene: 'wash', dark: true, vars: P('#0c1222', '#141b30', '#e6ebf7', '#b2bbd5', '#8791b0', '#f2a58a', '#e6c882', 'rgba(230,235,247,0.2)', { '--w1': '#2fd0a4', '--w2': '#7566f0', '--w3': '#f0809f' }) },
-    { id: 'pendulum', label: 'Pendulum wave', group: 'alive', scene: 'pendulum', dark: false, vars: P('#e0e2d2', '#eef0e2', '#22261b', '#434a39', '#525b45', '#933c2b', '#876a2c', 'rgba(34,38,27,0.2)') },
     { id: 'murmur', label: 'Murmuration', group: 'alive', scene: 'murmur', dark: false, vars: P('#c2d0e4', '#d8e3f1', '#0f1f30', '#2a3e54', '#374f68', '#7b382d', '#86682a', 'rgba(15,31,48,0.22)') },
     { id: 'life', label: 'Game of Life', group: 'alive', scene: 'life', dark: false, vars: P('#e2efbd', '#eef6d2', '#26340f', '#415221', '#50642c', '#36691b', '#7a6a28', 'rgba(38,52,15,0.2)') },
     { id: 'spiro', label: 'Harmonograph', group: 'alive', scene: 'harmonograph', dark: false, vars: P('#ecd6c2', '#f6e9dc', '#2d1e15', '#543e32', '#674e41', '#8f3721', '#a0702a', 'rgba(45,30,21,0.2)') },
     { id: 'tank', label: 'Ripple tank', group: 'alive', scene: 'tank', dark: true, vars: P('#17132e', '#201b3d', '#e7e4fb', '#bfbbe4', '#9792c4', '#7ee6d6', '#f0c97a', 'rgba(231,228,251,0.2)') },
-    { id: 'chalk', label: 'Chalkboard', group: 'alive', scene: 'chalk', dark: true, vars: P('#1a3b36', '#22463f', '#f0efe6', '#c5d3c6', '#9db3a2', '#f2c46d', '#9fd3b0', 'rgba(240,239,230,0.22)') },
     // ---- still: nothing moves ----
     { id: 'paper', label: 'Plain paper', group: 'still', neutral: true },
-    { id: 'linen', label: 'Linen', group: 'still', texture: 'linen', dark: false, vars: P('#e6dccb', '#f0e9da', '#251f16', '#54483a', '#605446', '#7d2f2f', '#85652a', 'rgba(37,31,22,0.2)', { '--tex': 'rgba(70,50,25,0.13)' }) },
     { id: 'grid', label: 'Graph paper', group: 'still', texture: 'grid', dark: false, vars: P('#f0f5f8', '#fafcfd', '#14202b', '#43546a', '#4d6076', '#2a5f9c', '#7d6d3e', 'rgba(20,32,43,0.2)', { '--tex': 'rgba(42,95,156,0.2)', '--tex2': 'rgba(42,95,156,0.09)' }) },
     { id: 'sage', label: 'Sage', group: 'still', dark: false, vars: P('#dde6da', '#e9f0e6', '#1c2a20', '#44574a', '#4d5d51', '#8a3a2b', '#7d7336', 'rgba(28,42,32,0.18)') },
-    { id: 'rose', label: 'Rosewater', group: 'still', dark: false, vars: P('#f0dedb', '#f8ebe8', '#2b1c1d', '#5e4546', '#675354', '#7a2336', '#a2703a', 'rgba(43,28,29,0.18)') },
     { id: 'fog', label: 'Fog', group: 'still', dark: false, vars: P('#e3e6ea', '#eef0f3', '#1b2027', '#485260', '#525b66', '#2d5a88', '#8a7a4a', 'rgba(27,32,39,0.17)') },
     { id: 'butter', label: 'Butter', group: 'still', dark: false, vars: P('#f3e8c8', '#f9f1da', '#2a2316', '#5c5036', '#655c43', '#8c3b22', '#9a7424', 'rgba(42,35,22,0.18)') },
     { id: 'dusk', label: 'Dusk', group: 'still', dark: true, vars: P('#1c2332', '#232b3d', '#e8eaf1', '#b6bdce', '#8f98ad', '#e3ab8c', '#d8b46a', 'rgba(232,234,241,0.18)') },
-    { id: 'walnut', label: 'Walnut', group: 'still', dark: true, vars: P('#241b15', '#2d221a', '#f0e4d4', '#c6b49e', '#a1907d', '#e49c6d', '#d3a85a', 'rgba(240,228,212,0.18)') },
-    { id: 'graphite', label: 'Graphite', group: 'still', dark: true, vars: P('#16181b', '#1e2125', '#e9eaec', '#b4b8bf', '#8b9098', '#dc8c76', '#c9a862', 'rgba(233,234,236,0.17)') },
   ];
-  const VAR_KEYS = ['--bg', '--paper', '--ink', '--soft', '--mute', '--rule', '--accent', '--brass', '--tex', '--tex2', '--w1', '--w2', '--w3'];
+  const VAR_KEYS = ['--bg', '--paper', '--ink', '--soft', '--mute', '--rule', '--accent', '--brass', '--tex', '--tex2'];
   const DEFAULT_SURFACE = 'deep'; // Deep water
-  const surfaceById = (id) => SURFACES.find((x) => x.id === id) || SURFACES[0];
+  const surfaceById = (id) => SURFACES.find((x) => x.id === id) || SURFACES.find((x) => x.id === DEFAULT_SURFACE);
 
   /* ---------- Settings ---------- */
   const root = document.documentElement;

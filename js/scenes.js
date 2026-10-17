@@ -1,5 +1,5 @@
-/* Six more living backgrounds, each one a small piece of science or maths you can play with:
-   pendulum wave, murmuration, Game of Life, harmonograph, ripple-tank interference, formula chalkboard. */
+/* Four more living backgrounds, each one a small piece of science or maths you can play with:
+   murmuration, Game of Life, harmonograph and ripple-tank interference. */
 (() => {
   const M = window.Mindrise;
   if (!M || !M.bg || !M.scenes) return;
@@ -17,49 +17,6 @@
       C = { ink: M.css('--ink'), accent: M.css('--accent'), brass: M.css('--brass'), soft: M.css('--soft') };
     }
     return C;
-  };
-
-  /* ---------- Pendulum wave ----------
-     Eighteen pendulums whose lengths are chosen so that, over one minute, each completes one more
-     swing than its neighbour. They drift in and out of step, making waves, then realign. */
-  const NP = 18;
-  const NSWINGS = 20;
-  let pAmp = new Float32Array(NP).fill(1);
-  const bob = (i, t) => {
-    const margin = B.w * 0.07;
-    const x0 = margin + ((B.w - 2 * margin) * i) / (NP - 1);
-    const omega = (TAU * (NSWINGS + i)) / 60;
-    const len = B.h * 0.64 * Math.pow(NSWINGS / (NSWINGS + i), 2);
-    const th = pAmp[i] * 0.5 * Math.cos(omega * t);
-    return { x0, x: x0 + len * Math.sin(th), y: len * Math.cos(th) };
-  };
-  M.scenes.pendulum = {
-    init() { pAmp = new Float32Array(NP).fill(1); },
-    step() {
-      for (let i = 0; i < NP; i++) {
-        let target = 1;
-        if (ptr.x !== OFF) {
-          const b = bob(i, B.clock);
-          if (Math.hypot(b.x - ptr.x, b.y - ptr.y) < 120) target = 1.9; // a little push from the cursor
-        }
-        pAmp[i] = lerp(pAmp[i], target, 0.04);
-      }
-    },
-    paint() {
-      const c = pal();
-      ctx.lineWidth = 1;
-      ctx.strokeStyle = rgba(c.ink, 0.28);
-      ctx.beginPath(); ctx.moveTo(B.w * 0.04, 0); ctx.lineTo(B.w * 0.96, 0); ctx.stroke();
-      for (let i = 0; i < NP; i++) {
-        const b = bob(i, B.clock);
-        ctx.strokeStyle = rgba(c.ink, 0.22);
-        ctx.beginPath(); ctx.moveTo(b.x0, 0); ctx.lineTo(b.x, b.y); ctx.stroke();
-        ctx.fillStyle = rgba(c.accent, 0.8);
-        ctx.beginPath(); ctx.arc(b.x, b.y, 6.5, 0, TAU); ctx.fill();
-        ctx.strokeStyle = rgba(c.ink, 0.45);
-        ctx.beginPath(); ctx.arc(b.x, b.y, 6.5, 0, TAU); ctx.stroke();
-      }
-    },
   };
 
   /* ---------- Murmuration (boids) ----------
@@ -222,39 +179,4 @@
       }
     },
   };
-
-  /* ---------- Formula chalkboard ---------- */
-  const FORMULAS = ['E = mc²', 'a² + b² = c²', 'F = ma', 'e^(iπ) + 1 = 0', 'Σ 1/n² = π²/6', '∫ f(x) dx', 'ΔxΔp ≥ ħ/2', 'PV = nRT', 'sin²θ + cos²θ = 1',
-    'x = (−b ± √(b² − 4ac)) / 2a', 'C₆H₁₂O₆', 'H₂O', 'λ = h/p', 'V = IR', 'ΔG = ΔH − TΔS', 'F = G m₁m₂ / r²', 'v = fλ', 'ΔS ≥ 0', 'n!', 'π r²'];
-  let items = [];
-  const spawn = (x, y) => ({ text: FORMULAS[Math.floor(Math.random() * FORMULAS.length)], x: x ?? rand(0, B.w), y: y ?? rand(-B.h * 0.2, B.h), vy: rand(8, 22), vx: 0, size: rand(15, 24), a: rand(0.14, 0.34) });
-  M.scenes.chalk = {
-    init() { items = Array.from({ length: B.w < 700 ? 14 : 28 }, () => spawn()); },
-    step(dt) {
-      for (const it of items) {
-        if (ptr.x !== OFF) {
-          const dx = it.x - ptr.x, dy = it.y - ptr.y, d = Math.hypot(dx, dy);
-          if (d < 160) { const f = (1 - d / 160) ** 2 * 90 * dt; it.vx += (dx / (d || 1)) * f; it.y += (dy / (d || 1)) * f * 0.6; }
-        }
-        it.vx *= 0.97;
-        it.x += it.vx; it.y += it.vy * dt;
-        if (it.y > B.h + 40) Object.assign(it, spawn(rand(0, B.w), -30));
-        if (it.x < -200) it.x = B.w + 100; else if (it.x > B.w + 200) it.x = -100;
-      }
-    },
-    paint() {
-      const c = pal();
-      ctx.textAlign = 'center';
-      for (const it of items) {
-        ctx.font = `italic ${it.size.toFixed(1)}px Newsreader, Georgia, serif`;
-        ctx.fillStyle = rgba(c.ink, it.a);
-        ctx.fillText(it.text, it.x, it.y);
-      }
-    },
-  };
-  addEventListener('pointerdown', (e) => {
-    if (M.surface().scene !== 'chalk' || !M.motion || e.target.closest(interactive)) return;
-    items.push(spawn(e.clientX, e.clientY));
-    if (items.length > 48) items.shift();
-  });
 })();

@@ -5,13 +5,42 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Our approach — MindRise</title>
   <meta name="description" content="The research behind MindRise: attention, retrieval practice, spaced repetition, interleaving and rest, with practical advice for students and educators." />
+  <meta name="terms-version" content="2026-10-17" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap" rel="stylesheet" />
-  <script>try{var s=JSON.parse(localStorage.getItem('mindrise:settings')||'null');document.documentElement.dataset.pre=(s&&s.v===2&&s.surface)||'deep'}catch(e){document.documentElement.dataset.pre='deep'}</script>
-  <link rel="stylesheet" href="css/site.css?v=fc36dcb6" />
+  <script>try{var s=JSON.parse(localStorage.getItem('mindrise:settings')||'null');document.documentElement.dataset.pre=(s&&s.v===2&&s.surface)||'deep'}catch(e){document.documentElement.dataset.pre='deep'}
+  (function(){var d=document.documentElement,ok=/[/]terms([.]html)?[/]?$/.test(location.pathname);['localStorage','sessionStorage'].forEach(function(n){try{var a=JSON.parse(window[n].getItem('mindrise:agreed')||'null');if(a&&a.v==='2026-10-17')ok=true}catch(e){}});if(ok)d.dataset.agreed='1'})()</script>
+  <link rel="stylesheet" href="css/site.css?v=3b2fb596" />
 </head>
 <body data-scene="ruled">
+  <div id="gate" class="gate" role="dialog" aria-modal="true" aria-labelledby="gateTitle" aria-describedby="gateLead">
+    <div class="gate-card" id="gateMain">
+      <p class="kicker">Before you come in</p>
+      <h2 id="gateTitle" tabindex="-1">Our promises, in writing</h2>
+      <p id="gateLead">MindRise puts its promises into its Privacy &amp; Terms. By entering the site you agree to them.</p>
+      <ul class="gate-list">
+        <li><b>No ads.</b> Not on this site, and not in our free software.</li>
+        <li><b>No data mining.</b> We do not profile, sell or mine anyone’s data.</li>
+        <li><b>Nothing collected.</b> No accounts, no cookies, no tracking.</li>
+        <li><b>Free for K-12.</b> No hidden costs for schools, teachers or students.</li>
+      </ul>
+      <p class="gate-read"><a class="link-arrow" href="terms.html">Read the full Privacy &amp; Terms <span aria-hidden="true">→</span></a></p>
+      <div class="gate-actions">
+        <button type="button" class="btn solid" id="gateAgree"><span>I agree, enter the site</span></button>
+        <button type="button" class="btn" id="gateDecline"><span>Decline</span></button>
+      </div>
+    </div>
+    <div class="gate-card" id="gateNo" hidden>
+      <p class="kicker">No problem</p>
+      <h2 id="gateNoTitle" tabindex="-1">We can’t show you the site without your agreement</h2>
+      <p>Nothing has been stored about you. If you change your mind, you can read the terms again and agree. Otherwise you are free to close this tab.</p>
+      <div class="gate-actions">
+        <button type="button" class="btn solid" id="gateBack"><span>Review the promises</span></button>
+        <a class="btn" href="terms.html"><span>Read the Privacy &amp; Terms</span></a>
+      </div>
+    </div>
+  </div>
   <a class="skip" href="#main">Skip to content</a>
   <div id="progress" aria-hidden="true"></div>
   <canvas id="field" aria-hidden="true"></canvas>
@@ -175,14 +204,15 @@
         <div><h4>Contact</h4><ul><li><a href="mailto:contact@aaugs.com">Email us</a></li><li><a href="contact.html">Send a message →</a></li></ul></div>
         <div><h4>Reading</h4><ul><li><button id="setSurface">Background: Window light</button></li><li><button id="setTheme">Reading: paper</button></li><li><button id="setMotion">Motion: on</button></li><li><button id="setSound">Sound: off</button></li></ul></div>
       </div>
-      <div class="legal"><span><span id="greet"></span> · © <span id="year"></span> MindRise</span><span>Software that makes a difference</span></div>
+      <div class="legal"><span><span id="greet"></span> · © <span id="year"></span> MindRise</span><span>Software that makes a difference · <a href="terms.html">Privacy &amp; Terms</a></span></div>
     </div>
   </footer>
 
-  <script src="js/core.js?v=42bc31df"></script>
+  <script src="js/gate.js?v=f8ef63dd"></script>
+  <script src="js/core.js?v=adc106cf"></script>
   <script src="js/ambient.js?v=9626b62f"></script>
-  <script src="js/scenes.js?v=271aca66"></script>
-  <script src="js/backgrounds.js?v=a12cbe80"></script>
+  <script src="js/scenes.js?v=16cba032"></script>
+  <script src="js/backgrounds.js?v=6763d1c3"></script>
   <script src="js/reading.js?v=fd6e73bf"></script>
   <script src="js/rest.js?v=47943aed"></script>
 </body>

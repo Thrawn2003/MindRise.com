@@ -466,11 +466,6 @@ mark.hl:hover { background: linear-gradient(transparent 18%, color-mix(in srgb, 
 [data-lamp="off"] body::before { display: none; }
 [data-flat="on"] body::after { display: none; }
 html { background: var(--bg); }
-[data-texture="linen"] body {
-  background-image:
-    repeating-linear-gradient(0deg, var(--tex) 0 1px, transparent 1px 3px),
-    repeating-linear-gradient(90deg, var(--tex) 0 1px, transparent 1px 3px);
-}
 [data-texture="grid"] body {
   background-image:
     linear-gradient(var(--tex) 1px, transparent 1px),
@@ -646,3 +641,51 @@ html[data-pre="deep"]:not([data-surface]) { --bg: #0d2830; --paper: #133541; --i
 /* keep the floating Background button clear of the copyright line */
 .site-footer { padding-bottom: 150px; }
 @media (max-width: 560px) { .site-footer { padding-bottom: 130px; } }
+
+/* =====================================================================
+   Agreement gate and the Privacy & Terms page
+   ===================================================================== */
+/* until someone has agreed, only the gate (and the quiet background) is visible */
+html:not([data-agreed]) body > *:not(#gate):not(#field):not(script) { visibility: hidden; }
+html[data-agreed] .gate { display: none; }
+.gate { position: fixed; inset: 0; z-index: 500; display: grid; place-items: center; padding: 24px var(--gutter); overflow-y: auto; }
+.gate-card { width: min(560px, 100%); padding: clamp(26px, 5vw, 46px); background: var(--paper); border: 1px solid var(--rule); box-shadow: 0 30px 80px rgba(0, 0, 0, 0.28); animation: gateIn 0.9s var(--ease) both; }
+@keyframes gateIn { from { opacity: 0; transform: translateY(14px); } }
+.gate-card h2 { font-size: clamp(1.7rem, 4vw, 2.3rem); font-weight: 330; letter-spacing: -0.015em; line-height: 1.15; margin: 12px 0 14px; outline: none; }
+.gate-card p { color: var(--soft); }
+.gate-list { list-style: none; margin: 20px 0 6px; border-top: 1px solid var(--rule); }
+.gate-list li { padding: 11px 0; border-bottom: 1px solid var(--rule); font-size: 0.98rem; color: var(--soft); }
+.gate-list b { color: var(--ink); font-weight: 500; }
+.gate-read { margin: 20px 0 0; }
+.gate-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
+.gate-actions .btn { text-align: center; }
+html.just-agreed .site-header, html.just-agreed main, html.just-agreed .site-footer { animation: gateIn 0.9s var(--ease) both; }
+
+.terms { max-width: 76ch; padding-bottom: 40px; }
+.summary { padding: 26px 28px; border: 1px solid var(--rule); background: color-mix(in srgb, var(--paper) 70%, transparent); }
+.summary h2 { font: 500 0.72rem var(--sans); letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
+.summary ul { list-style: none; }
+.summary li { padding: 8px 0; border-top: 1px solid var(--rule); color: var(--soft); }
+.summary li:first-child { border-top: 0; }
+.summary b { color: var(--ink); font-weight: 500; }
+.summary .meta { margin-top: 12px; font: 0.72rem var(--sans); letter-spacing: 0.06em; color: var(--mute); }
+.terms-toc { margin: 40px 0 10px; }
+.terms-toc ol { list-style: none; columns: 2; column-gap: 40px; font-size: 0.95rem; }
+.terms-toc li { break-inside: avoid; padding: 4px 0; }
+.terms-toc a { color: var(--soft); border-bottom: 1px solid transparent; transition: color 0.3s, border-color 0.3s; }
+.terms-toc a:hover { color: var(--ink); border-color: var(--accent); }
+.terms-toc a span { color: var(--mute); font: 0.68rem var(--sans); letter-spacing: 0.12em; text-transform: uppercase; margin-right: 6px; }
+.article { padding-top: 46px; scroll-margin-top: 90px; }
+.article h2 { font-size: clamp(1.5rem, 3vw, 2.1rem); font-weight: 330; letter-spacing: -0.015em; padding-top: 22px; border-top: 1px solid var(--rule); margin-bottom: 16px; }
+.article .an { display: block; font: 500 0.7rem var(--sans); letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+.clauses { list-style: none; }
+.clause { display: grid; grid-template-columns: 3.2rem minmax(0, 1fr); gap: 8px; padding: 9px 0; color: var(--soft); }
+.clause .cn { font: 500 0.78rem var(--sans); letter-spacing: 0.08em; color: var(--mute); padding-top: 0.45rem; }
+.clause b { color: var(--ink); font-weight: 500; }
+.clause a { color: var(--ink); border-bottom: 1px solid var(--accent); }
+.terms-agree { margin-top: 56px; padding: 28px 0 10px; border-top: 1px solid var(--rule); scroll-margin-top: 90px; }
+.terms-agree h2 { font-size: clamp(1.5rem, 3vw, 2.1rem); font-weight: 330; margin-bottom: 12px; }
+.terms-agree p { color: var(--soft); margin-bottom: 18px; }
+.legal a { border-bottom: 1px solid transparent; transition: border-color 0.3s, color 0.3s; }
+.legal a:hover { color: var(--ink); border-color: var(--accent); }
+@media (max-width: 700px) { .terms-toc ol { columns: 1; } .clause { grid-template-columns: 2.6rem minmax(0, 1fr); } }
