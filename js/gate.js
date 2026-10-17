@@ -45,8 +45,9 @@
       open.hidden = !!a; done.hidden = !a;
       if (a) { const d = new Date(a.at); $('agreedOn').textContent = isNaN(d) ? a.at : d.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' }); $('agreedOn').setAttribute('datetime', a.at); }
     };
-    $('termsAgree').addEventListener('click', () => { write(); refresh(); location.href = 'index.html'; });
-    $('termsWithdraw').addEventListener('click', () => { clear(); refresh(); });
+    $('termsAgree').addEventListener('click', () => { write(); root.dataset.agreed = '1'; refresh(); location.href = 'index.html'; });
+    $('termsDecline').addEventListener('click', () => { $('declineNote').hidden = false; $('declineNote').scrollIntoView({ block: 'nearest' }); });
+    $('termsWithdraw').addEventListener('click', () => { clear(); delete root.dataset.agreed; refresh(); window.scrollTo(0, 0); });
     refresh();
   }
   addEventListener('storage', (e) => { if (e.key === KEY && !isTerms) { if (read()) root.dataset.agreed = '1'; else { delete root.dataset.agreed; show('main'); } } });

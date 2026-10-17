@@ -10,8 +10,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap" rel="stylesheet" />
   <script>try{var s=JSON.parse(localStorage.getItem('mindrise:settings')||'null');document.documentElement.dataset.pre=(s&&s.v===2&&s.surface)||'deep'}catch(e){document.documentElement.dataset.pre='deep'}
-  (function(){var d=document.documentElement,ok=/[/]terms([.]html)?[/]?$/.test(location.pathname);['localStorage','sessionStorage'].forEach(function(n){try{var a=JSON.parse(window[n].getItem('mindrise:agreed')||'null');if(a&&a.v==='2026-10-17')ok=true}catch(e){}});if(ok)d.dataset.agreed='1'})()</script>
-  <link rel="stylesheet" href="css/site.css?v=3b2fb596" />
+  (function(){var d=document.documentElement;if(/[/]terms([.]html)?[/]?$/.test(location.pathname))d.dataset.terms='1';var ok=false;['localStorage','sessionStorage'].forEach(function(n){try{var a=JSON.parse(window[n].getItem('mindrise:agreed')||'null');if(a&&a.v==='2026-10-17')ok=true}catch(e){}});if(ok)d.dataset.agreed='1'})()</script>
+  <link rel="stylesheet" href="css/site.css?v=fcf49d4c" />
 </head>
 <body data-scene="ruled">
   <div id="gate" class="gate" role="dialog" aria-modal="true" aria-labelledby="gateTitle" aria-describedby="gateLead">
@@ -62,6 +62,7 @@
 
   <main id="main">
 
+    <div class="terms-bar wrap"><span class="tb-mark">Mindrise</span><a href="index.html">Back to the promises</a></div>
     <section class="page-head wrap">
       <p class="kicker fade">Privacy &amp; Terms</p>
       <h1 data-rise>No ads. No data <em>mining</em>.</h1>
@@ -123,7 +124,8 @@
         <h2 id="agreeH">Your agreement</h2>
         <div id="agreeOpen">
           <p>By entering the site you accept these Terms.</p>
-          <p><button type="button" class="btn solid" id="termsAgree"><span>I agree, enter the site</span></button></p>
+          <p class="agree-actions"><button type="button" class="btn solid" id="termsAgree"><span>I agree, enter the site</span></button> <button type="button" class="btn" id="termsDecline"><span>Decline</span></button></p>
+          <p id="declineNote" hidden>Without your agreement we can’t show you the rest of the site. Nothing has been stored about you, and you are free to close this tab.</p>
         </div>
         <div id="agreeDone" hidden>
           <p>You agreed to version 2026-10-17 of these Terms on <time id="agreedOn"></time>. That record is kept only in this browser.</p>
@@ -148,7 +150,7 @@
     </div>
   </footer>
 
-  <script src="js/gate.js?v=f8ef63dd"></script>
+  <script src="js/gate.js?v=3d915339"></script>
   <script src="js/core.js?v=adc106cf"></script>
   <script src="js/ambient.js?v=9626b62f"></script>
   <script src="js/scenes.js?v=16cba032"></script>
