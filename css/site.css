@@ -328,7 +328,7 @@ section.block { padding: clamp(70px, 10vw, 140px) 0; position: relative; }
 
 /* ----- footer ----- */
 .site-footer { position: relative; z-index: 1; margin-top: 80px; padding: 70px 0 40px; border-top: 1px solid var(--rule); overflow: hidden; }
-#bigmark { font-size: clamp(4.5rem, 19vw, 17rem); line-height: 0.88; letter-spacing: -0.04em; font-weight: 250; margin-bottom: 56px; font-style: italic; user-select: none; }
+#bigmark { font-size: clamp(2.6rem, 8.5vw, 6.5rem); line-height: 0.95; letter-spacing: -0.03em; font-weight: 250; margin-bottom: 38px; font-style: italic; user-select: none; }
 .foot-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; font-size: 0.98rem; color: var(--soft); }
 .foot-grid h4 { font: 500 0.66rem var(--sans); letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; }
 .foot-grid ul { list-style: none; }
@@ -640,3 +640,9 @@ html { background: var(--bg); }
   .values { grid-template-columns: 1fr; }
 }
 @media (max-width: 560px) { .team { grid-template-columns: 1fr; } }
+
+/* deep water from the very first paint (a tiny script in <head> sets data-pre before the page's own script runs) */
+html[data-pre="deep"]:not([data-surface]) { --bg: #0d2830; --paper: #133541; --ink: #e3f1f4; --soft: #b0cbd2; --mute: #86a9b3; --accent: #f0a98c; --brass: #e0c27a; --rule: rgba(227, 241, 244, 0.2); color-scheme: dark; }
+/* keep the floating Background button clear of the copyright line */
+.site-footer { padding-bottom: 150px; }
+@media (max-width: 560px) { .site-footer { padding-bottom: 130px; } }

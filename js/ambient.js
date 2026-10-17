@@ -549,7 +549,7 @@
   const headline = $('#headline');
   if (headline) swellWord(headline, { lo: 260, hi: 520, radius: 230, lift: 5 });
   const bigmark = $('#bigmark');
-  if (bigmark) swellWord(bigmark, { lo: 200, hi: 600, radius: 260, lift: 10 });
+  if (bigmark) swellWord(bigmark, { lo: 200, hi: 600, radius: 190, lift: 5 });
 
   /* =========================================================
      Chapter navigation (long reads)

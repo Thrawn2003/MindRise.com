@@ -10,7 +10,7 @@
     b.querySelector('span').textContent = on ? 'In use as your background' : 'Use as my background';
   });
   buttons.forEach((b) => b.addEventListener('click', () => {
-    M.set({ surface: M.settings.surface === b.dataset.surface ? 'window' : b.dataset.surface });
+    M.set({ surface: M.settings.surface === b.dataset.surface ? M.DEFAULT_SURFACE : b.dataset.surface });
     M.sfx.note(3);
   }));
   M.bus.addEventListener('settings', sync);

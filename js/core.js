@@ -68,6 +68,7 @@
     { id: 'graphite', label: 'Graphite', group: 'still', dark: true, vars: P('#16181b', '#1e2125', '#e9eaec', '#b4b8bf', '#8b9098', '#dc8c76', '#c9a862', 'rgba(233,234,236,0.17)') },
   ];
   const VAR_KEYS = ['--bg', '--paper', '--ink', '--soft', '--mute', '--rule', '--accent', '--brass', '--tex', '--tex2', '--w1', '--w2', '--w3'];
+  const DEFAULT_SURFACE = 'deep'; // Deep water
   const surfaceById = (id) => SURFACES.find((x) => x.id === id) || SURFACES[0];
 
   /* ---------- Settings ---------- */
@@ -77,7 +78,9 @@
     theme: saved.theme === 'night' || saved.theme === 'paper' ? saved.theme : (matchMedia('(prefers-color-scheme: dark)').matches ? 'night' : 'paper'),
     motion: saved.motion !== undefined ? saved.motion : !prefersReduced,
     sound: saved.sound === true, // always off until someone asks for it
-    surface: surfaceById(saved.surface).id,
+    // settings version 2 introduced Deep water as the default; older saved choices are reset to it once
+    surface: saved.v === 2 ? surfaceById(saved.surface).id : DEFAULT_SURFACE,
+    v: 2,
   };
   const bus = new EventTarget();
   const surface = () => surfaceById(settings.surface);
@@ -151,7 +154,7 @@
 
   window.Mindrise = {
     $, $$, store, clamp, lerp, rand, pad, fmtTime, css, rgba, prefersReduced, finePointer,
-    settings, set, bus, sfx, SURFACES, surface, surfaceById, effectiveTheme, toggleTheme,
+    settings, set, bus, sfx, DEFAULT_SURFACE, SURFACES, surface, surfaceById, effectiveTheme, toggleTheme,
     get motion() { return settings.motion; },
   };
 })();
